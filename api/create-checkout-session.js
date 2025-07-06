@@ -1,3 +1,5 @@
+console.log("🔥 API handler is loading...");
+
 import Stripe from "stripe";
 import admin from "firebase-admin";
 
