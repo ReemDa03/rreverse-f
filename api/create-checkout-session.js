@@ -48,6 +48,14 @@ export default async function handler(req, res) {
       currency: docCurrency,
     } = docSnap.data();
 
+    
+// 🪵 Debug log
+console.log("🔍 Total:", total);
+console.log("🔍 Slug:", slug);
+console.log("🔍 stripeSecretKey:", stripeSecretKey);
+console.log("🔍 success_url:", success_url);
+console.log("🔍 cancel_url:", cancel_url);
+
     if (!stripeSecretKey || !success_url || !cancel_url) {
       return res.status(400).json({ error: "Stripe data missing" });
     }
@@ -77,7 +85,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({ id: session.id });
   } catch (err) {
-    
+
      console.error("❌ Stripe error:", err.message);
   console.error(err); // 🧠 اطبعي كل تفاصيل الخطأ
 
@@ -85,3 +93,4 @@ export default async function handler(req, res) {
     res.status(500).json({ error: "Server error" });
   }
 }
+
