@@ -1,0 +1,23 @@
+/* 📁 src/Components/LanguageSwitcher.css */
+.language-switcher {
+  display: flex;
+  border: 1px;
+  
+  overflow: hidden;
+}
+
+.language-switcher button {
+  flex: 1;
+  padding: 5px 10px;
+  background: #eee;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.language-switcher button.active {
+  background-color: #4caf50;
+  color: white;
+}

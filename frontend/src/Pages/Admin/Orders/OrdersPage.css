@@ -1,0 +1,85 @@
+.orders-container {
+  padding: 20px;
+}
+
+.orders-title {
+  margin-top: 10px;
+}
+
+.orders-count {
+  margin-bottom: 10px;
+}
+
+.orders-note {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 14px;
+}
+
+.orders-filter,
+.orders-type-filter {
+  margin-bottom: 15px;
+}
+
+.order-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 10px 0;
+  padding: 15px;
+  background-color: #f9f9f9;
+}
+
+.order-header {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.order-details {
+  margin-top: 10px;
+}
+
+.order-notes {
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.order-status-controls {
+  margin-top: 10px;
+}
+
+.status-btn {
+  margin-right: 5px;
+  padding: 4px 10px;
+  border: 1px solid #aaa;
+  background-color: #eee;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancelled-order-box {
+  margin-top: 10px;
+  background-color: #ffecec;
+  border: 1px solid #ff9999;
+  padding: 10px;
+  border-radius: 6px;
+}
+.delete {
+  padding: 6px 12px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.delete:hover {
+  background-color: #e60000;
+}
+
+.unseen-order {
+  border: 2px solid #ff5e5e;
+  background-color: #fff3f3;
+}
