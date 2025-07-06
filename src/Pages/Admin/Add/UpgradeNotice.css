@@ -1,0 +1,48 @@
+.upgrade-notice {
+  background-color: #fff3f3;
+  padding: 1.5rem;
+  border: 1px solid #ffcccc;
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 2rem;
+  width: 90%;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem auto 0;
+
+  margin-bottom: 20px;
+}
+
+.upgrade-title {
+  color: #b33;
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.upgrade-text {
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.upgrade-btn {
+  background-color: #25d366;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.upgrade-btn:hover {
+  background-color: #1ebc59;
+}
+
+.whatsapp-icon {
+  font-size: 1.2rem;
+}

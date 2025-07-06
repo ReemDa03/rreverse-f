@@ -1,0 +1,215 @@
+/* القسم الرئيسي */
+.special-wrapper {
+  margin-top: 40px;
+}
+
+/* حاوية عنوان القسم الجديد */
+.special-title-input-wrapper {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* صورة المعاينة */
+.special-preview-img {
+  width: 100px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+/* قائمة العناصر */
+.special-item-content {
+  display: grid;
+  grid-template-columns: 70px 1.5fr 25px 2.3fr 0.2fr;
+  align-items: center;
+  gap: 15px;
+}
+
+/* بطاقة عنصر */
+.special-item-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* محتوى بطاقة العنصر */
+.special-item-content {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px 50px;
+  align-items: center;
+  gap: 15px;
+}
+
+/* صورة العنصر */
+.special-item-img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* وصف العنصر */
+.special-item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* السعر */
+.special-item-price s {
+  color: red;
+  margin-right: 8px;
+}
+
+/* زر الحذف الصغير */
+.special-delete-btn {
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* المودال */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  color: white;
+}
+
+.modal-buttons .yes {
+  background: red;
+}
+
+.modal-buttons .no {
+  background: gray;
+}
+.special-wrapper{
+    padding-left: 15px;
+}
+
+.special-title-box {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 16px 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.special-delete-btn {
+  background-color: #eee;
+  border: none;
+  color: #333;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.special-delete-btn:hover {
+  background-color: #ddd;
+}
+
+/* مودال وصف العنصر */
+.description-modal {
+  background: #f9f9f9;
+  padding: 12px 16px;
+  border-radius: 6px;
+  position: relative;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  animation: fadeIn 0.2s ease-in-out;
+  word-wrap: break-word;
+}
+
+
+.description-modal-close {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  color: #888;
+}
+
+/* المودال فوق الصفحة */
+.description-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* دخول ناعم */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (max-width: 768px) {
+  .special-item-content {
+    grid-template-columns: 1fr;
+  }
+}

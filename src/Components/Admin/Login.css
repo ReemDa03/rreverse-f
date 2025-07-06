@@ -1,0 +1,169 @@
+/* overlay العام */
+.admin-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-in-out;
+  
+}
+
+/* الكرت أو الحاوية */
+.admin-container {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 2rem 1.5rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: slideUp 0.3s ease-in-out;
+}
+
+/* زر الإغلاق */
+.admin-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s ease;
+}
+
+.admin-close-btn:hover {
+  color: #000;
+}
+
+/* الفورم */
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-form input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.admin-form input:focus {
+  border-color: #333;
+  outline: none;
+}
+
+.admin-form button {
+  padding: 0.8rem 1rem;
+  background-color: #111827;
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.admin-form button:hover {
+  background-color: #1f2937;
+}
+
+/* مربع تأكيد تسجيل الخروج */
+.logout-confirm {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* الأنيميشن */
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0 }
+  to { transform: translateY(0); opacity: 1 }
+}
+.admin-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.admin-subtitle {
+  font-size: 1.3rem;
+  color: #555;
+  text-align: center;
+  margin-bottom: 1.4rem;
+}
+
+.admin-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.admin-or {
+  font-size: 1.5rem;
+  color: #777;
+}
+
+.admin-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.admin-btn.primary {
+  background-color: #111827;
+  color: white;
+}
+
+.admin-btn.primary:hover {
+  background-color: #1f2937;
+}
+
+.admin-btn.danger {
+  background-color: #dc2626;
+  color: white;
+}
+
+.admin-btn.danger:hover {
+  background-color: #b91c1c;
+}
+
+.logout-confirm {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.confirm-text {
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+

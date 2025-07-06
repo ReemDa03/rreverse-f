@@ -1,0 +1,312 @@
+.cart-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* يوسّط كل العناصر اللي جوا أفقياً */
+  padding: 24px;
+  width: 100%;
+}
+
+.cart-title {
+  align-self: flex-start;
+  margin-left: 24px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.cart-empty {
+  
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  margin-bottom: 20px;
+
+  width: 100%;
+  max-width: 500px;
+}
+
+
+.cart-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 20px;
+  align-self: flex-start;
+}
+
+.cart-item-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.cart-item-desc {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0.25rem 0;
+}
+
+.cart-item-price,
+.cart-item-size,
+.cart-item-total {
+  font-size: 0.95rem;
+  margin: 0.2rem 0;
+}
+
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.cart-btn {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cart-btn:hover {
+  background-color: #555;
+}
+
+.cart-quantity {
+  font-weight: bold;
+}
+
+.cart-item-separator {
+  margin-top: 1rem;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+/*cart-summary*/
+/* ✅ القسم الرئيسي */
+.cart-summary-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  width: 90%;
+  margin: 2rem auto;
+  align-items: start;
+  padding: 1rem;
+}
+
+/* ✅ القسم الأيسر (الصورة والمعلومات) */
+.cart-image-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.cart-image-box img {
+  width: 100%;
+  border-radius: 1.5rem;
+  object-fit: cover;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.cart-image-box p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+/* ✅ القسم الأيمن (CartSummary) */
+.cart-summary {
+  background-color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  
+}
+
+.summary-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #1f2937;
+}
+
+.summary-line {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #374151;
+}
+
+.summary-total {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 1.5rem;
+}
+
+/* ✅ استجابة الشاشة الصغيرة */
+@media (max-width: 768px) {
+  .cart-summary-section {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .cart-image-box img {
+    border-radius: 0.8rem;
+  }
+}
+.dine-option-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.dine-option-buttons button {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: none;
+  background-color: #999;
+  color: #000;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dine-option-buttons button:hover {
+  background-color: #ddd;
+}
+
+/*delivery*/
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(31, 41, 55, 0.5);
+  backdrop-filter: blur(6px); /* ✅ مموه */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content.delivery-modal {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 1.25rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #1f2937;
+  text-align: center;
+}
+
+.order-notes-input,
+.modal-content input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  background-color: #f9fafb;
+}
+
+.confirm-btn {
+  width: 100%;
+  background-color: #888;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirm-btn:hover {
+  background-color: #999;
+  color: #333;
+}
+
+.error-border {
+  border: 1px solid #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* animation بسيطة للظهور */
+.fade-in-modal {
+  opacity: 0;
+  transform: scale(0.9);
+  animation: fadeInDesc 0.3s ease forwards;
+}
+
+@keyframes fadeInDesc {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-in-page {
+  opacity: 0;
+  transform: scale(0.95);
+  animation: fadeInPage 0.6s ease-out forwards;
+}
+
+@keyframes fadeInPage {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-in-modal {
+  opacity: 0;
+  transform: scale(0.9);
+  animation: fadeInDelivery 0.3s ease forwards;
+}
+
+@keyframes fadeInDelivery {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

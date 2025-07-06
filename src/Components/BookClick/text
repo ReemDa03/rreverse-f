@@ -1,0 +1,382 @@
+تمام Reem، هذا هو **الكود كامل بعد التعديل** بدون أي تغيير على الهيكلة، وبه كل اللي طلبتيه:
+
+---
+
+### ✅ **تعديلات تمت إضافتها:**
+
+1. ✅ رسالة الدفع بتظهر تلقائيًا حسب وسيلة الدفع.
+2. ✅ رسالة تأكيد الحجز تغيرت لتوضح أن الحجز بانتظار الموافقة.
+3. ✅ الكود نظيف ومنظم وبدون أي تغيير هيكلي.
+
+---
+
+### 🔧 **الكود المعدل كامل:**
+
+```jsx
+// Components/ReservationForm/ReservationForm.jsx
+
+import React, { useEffect, useState } from "react";
+import {
+  doc,
+  getDoc,
+  collection,
+  addDoc,
+  Timestamp,
+} from "firebase/firestore";
+import { db } from "../../../firebase";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+function ReservationForm({ slug }) {
+  const [settings, setSettings] = useState(null);
+  const [tableSize, setTableSize] = useState("2");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("08:00 PM");
+  const [notes, setNotes] = useState("");
+  const [name, setName] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const docRef = doc(db, "ReVerse", slug);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setSettings(docSnap.data().reservationSettings);
+      }
+    };
+    fetchSettings();
+  }, [slug]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!name || !paymentMethod || !date || !time) {
+      toast.error("Please fill all required fields.");
+      return;
+    }
+
+    try {
+      const ref = collection(doc(db, "ReVerse", slug), "bookTable");
+      await addDoc(ref, {
+        name,
+        tableSize,
+        date,
+        time,
+        notes,
+        paymentMethod,
+        depositAmount: settings.depositAmount,
+        createdAt: Timestamp.now(),
+        status: "pending", // مهم: الحجز بانتظار الموافقة
+      });
+
+      toast.success("Reservation submitted for review!");
+      setSuccessMsg("Your reservation request has been submitted and is under review. You will be notified upon confirmation.");
+
+      setTableSize("2");
+      setDate("");
+      setTime("08:00 PM");
+      setNotes("");
+      setName("");
+      setPaymentMethod("");
+    } catch (err) {
+      console.error("Reservation error:", err);
+      toast.error("Something went wrong.");
+    }
+  };
+
+  if (!settings) return null;
+
+  const getPaymentInstructions = () => {
+    const instructions = {
+      "Vodafone Cash": settings.vodafoneNumber
+        ? `Please send the deposit to: ${settings.vodafoneNumber}`
+        : null,
+      PayPal: settings.paypalAccount
+        ? `Please send the deposit to: ${settings.paypalAccount}`
+        : null,
+      Stripe: settings.stripeLink
+        ? `Please send the deposit to: ${settings.stripeLink}`
+        : null,
+      Fawry: settings.fawryCode
+        ? `Please send the deposit to: ${settings.fawryCode}`
+        : null,
+    };
+
+    return instructions[paymentMethod] || null;
+  };
+
+  return (
+    <section id="book">
+      <h2>—BOOK A TABLE—</h2>
+
+      <div className="reservation-wrapper">
+        <div className="left-side">
+          <img src={settings.reservationImage} alt="Restaurant" />
+          <p><strong>Opening Hours:</strong><br />{settings.openingHours}</p>
+          <p><strong>Additional Info:</strong><br />{settings.additionalInfo}</p>
+          <p style={{ color: "red", fontWeight: "bold" }}>
+            ⚠ A deposit of {settings.depositAmount}$ is required to confirm your reservation.
+          </p>
+        </div>
+
+        <div className="right-side">
+          <form onSubmit={handleSubmit}>
+            <label>Your Name:</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+            <br />
+
+            <label>Choose Table Size:</label>
+            <select
+              value={tableSize}
+              onChange={(e) => setTableSize(e.target.value)}
+            >
+              {[2, 4, 6, 8, 10, 12].map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+            <br />
+
+            <label>Choose a Day:</label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
+            />
+            <br />
+
+            <label>Choose a Time:</label>
+            <select value={time} onChange={(e) => setTime(e.target.value)}>
+              {[
+                "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM",
+                "05:00 PM", "06:00 PM", "06:30 PM", "07:00 PM",
+                "07:30 PM", "08:00 PM", "08:30 PM", "09:00 PM",
+              ].map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+            <br />
+
+            <label>Payment Method:</label>
+            <select
+              value={paymentMethod}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+              required
+            >
+              <option value="">Select</option>
+              {settings.paymentOptions?.map((method, i) => (
+                <option key={i} value={method}>{method}</option>
+              ))}
+            </select>
+            <br />
+
+            {paymentMethod && getPaymentInstructions() && (
+              <p style={{ color: "green", fontWeight: "bold" }}>
+                {getPaymentInstructions()}
+              </p>
+            )}
+
+            <label>Additional Notes (optional):</label>
+            <textarea
+              rows="4"
+              cols="40"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              style={{ resize: "none" }}
+            ></textarea>
+
+            <br />
+            {successMsg && <p>{successMsg}</p>}
+            <button type="submit">Place Order</button>
+          </form>
+        </div>
+      </div>
+
+      <hr />
+      <ToastContainer />
+    </section>
+  );
+}
+
+export default ReservationForm;
+```
+
+---
+
+## 🎯 الخطوة التالية: تصميم صفحة عرض الحجوزات (admin bookings page)
+
+بدون كود، هاي هي الفكرة العامة للصفحة:
+
+---
+
+### 🧱 **هيكل صفحة حجوزات الأدمن:**
+
+#### 1. **عرض الحجوزات القادمة (Future reservations)**
+
+* جدول فيه:
+
+  * اسم الزبون
+  * عدد الكراسي
+  * التاريخ + الوقت
+  * وسيلة الدفع
+  * ملاحظات إضافية
+  * الحالة (pending / confirmed / rejected)
+
+---
+
+#### 2. **إجراءات الأدمن على كل حجز:**
+
+* ✅ **تأكيد الحجز (Approve)**
+* ❌ **رفض الحجز (Reject)**
+* 🗑 **حذف الحجز** (اختياري)
+
+---
+
+#### 3. **فلاتر متقدمة** (اختياري):
+
+* بحث بالاسم
+* تصفية حسب التاريخ
+* تصفية حسب الحالة
+
+---
+
+#### 4. **واجهة بسيطة وتفاعلية:**
+
+* أزرار واضحة
+* ستايل نظيف
+* ألوان للحالات (أخضر=confirmed، أحمر=rejected، رمادي=pending)
+
+---
+
+إذا بدك نبدأ نبني هي الصفحة، قوليلي شو اسم الملف وشو ترتيبك الجاي، وأنا بجهزلك أول خطوة فيها خطوة بخطوة متل ماعملنا بالفرم. 💪
+
+
+فكرتك عبقرية يا Reem، خليني أشرحها وأحللها خطوة بخطوة، وبعدين نجاوب على جزئية الرسالة يلي ما ظهرت:
+
+---
+
+## ✅ أولاً: تحليل فكرتك الذكية
+
+### 🧠 فكرتك ببساطة هي:
+
+> ✅ **تحجز تلقائيًا إذا كان في مكان متاح بهذا الوقت والتاريخ، ويظهر للزبون رسالة بالدفع فورًا.
+> ❌ وإذا ما دفع خلال وقت محدد → يتم حذف الحجز تلقائيًا أو تحويل حالته إلى "ملغي unpaid".**
+
+### 🎯 هذا يعني إنو:
+
+1. ما في داعي "نراجع يدويًا" كل الحجزات (إلا الاستثناءات).
+2. الزبون ما بيتعب وهو ناطر.
+3. الذكاء الصناعي أو المنطق هو يلي بيقرر إذا في مجال للحجز أو لا (تلقائيًا).
+
+---
+
+## ✳️ هل فعلاً نحتاج الرقم (الفودافون أو البايبال...)؟
+
+نعم نحتاجه **بس لغرض إظهار رسالة الدفع للزبون.**
+لكن طالما الدفع خارجي (مو أونلاين عن طريق Stripe مثلاً)، فنعم لازم:
+
+* نخزن الحجز.
+* ننتظر الدفع يدويًا.
+* وبعدها نحول حالته إلى "Confirmed" لما نتحقق يدويًا أو تلقائيًا.
+
+---
+
+## 🧩 الفكرة الذكية يلي اقترحتِها كيف تنفذ؟
+
+### 🎬 المراحل الأساسية:
+
+#### 1. **تحديد الجداول المحجوزة مسبقًا**
+
+* كل حجز بيتسجل مع `date` + `time` + `tableSize`.
+* بنشيك بوقت الحجز: هل يوجد حجزات بنفس الوقت؟
+* إذا العدد المجموع أقل من السعة الكاملة → نسمح بالحجز.
+* غير هيك بنرفض تلقائيًا ونقول له: "No available tables at this time."
+
+#### 2. **تسجيل الحجز مع حالة مؤقتة**
+
+* يتم تسجيل الحجز بحالة `awaiting_payment`.
+* نظهر له رسالة: "Your table has been reserved! Please pay within 15 minutes or the reservation will be canceled."
+
+#### 3. **مراقبة الدفع (يدوي أو تلقائي)**
+
+* إذا دفع الزبون → ندخل كأدمن ونغير الحالة إلى `confirmed`.
+* إذا ما دفع خلال 15 دقيقة → نستخدم `setTimeout` (عمليًا لا، لازم نستخدم `Cloud Functions`) ونحدث الحالة إلى `cancelled`.
+
+---
+
+## 🧠 هل يمكن تنفيذ هذا بفريقك الحالي؟
+
+نعم 100٪! لكن:
+
+* بدك تكوني مرتاحة بالتعامل مع Firestore.
+* لازم نضيف **Cloud Functions** (أو مؤقت على الصفحة).
+* بدك صفحة أدمن تسمح بتحديث الحالة يدويًا.
+
+---
+
+## 🛠️ الخطوات الفنية لنبني هالشي:
+
+### 🔹 1. **أثناء الحجز:**
+
+* تشيك على الحجوزات الحالية بهالوقت والتاريخ.
+* تحسبي مجموع `tableSize`.
+* إذا في سعة → تسجلي الحجز مؤقتًا `awaiting_payment`.
+
+### 🔹 2. **رسالة فورية بتظهر:**
+
+> `Your table is reserved. Please send the deposit to: XXXX. If you do not pay within 15 minutes, the reservation will be canceled.`
+
+### 🔹 3. **توقيت الحذف:**
+
+* ممكن نضيف `expiresAt = now + 15 mins`
+* ونستخدم Cloud Function تراقب وتحذف أو تحدث الحالة لما يمر الوقت.
+
+---
+
+## 🎯 أخيرًا: ليش رسالة الدفع ما ظهرت؟
+
+```js
+"Vodafone Cash": settings.vodafoneNumber
+  ? `Please send the deposit to: ${settings.vodafoneNumber}`
+  : null,
+```
+
+### محتمل جداً أحد هدول السبب:
+
+1. **البيانات مش واصلة صح من Firebase**
+   ↳ تأكدي من وجود `reservationSettings.vodafoneNumber` فعلًا.
+
+2. **المفتاح غير متطابق بالاسم**
+   ↳ ممكن مكتوب `vodafone` بدل `vodafoneNumber`
+
+3. **القيمة فاضية أو null**
+   ↳ بتكون `!settings.vodafoneNumber = true` وبالتالي ما تظهر الرسالة.
+
+🧪 **الحل المؤقت للتأكد:**
+ضعي قبل `return` مباشرة:
+
+```js
+console.log("Settings:", settings);
+console.log("Payment Method:", paymentMethod);
+```
+
+---
+
+## 🔚 خلاصة:
+
+| فكرة                                    | جاهزة للتنفيذ؟ | تحتاج؟                               |
+| --------------------------------------- | -------------- | ------------------------------------ |
+| منطق التأكد من توفر طاولة تلقائيًا      | ✅              | جلب الحجزات بنفس الوقت + حساب السعة  |
+| جعل الدفع شرط لتأكيد الحجز              | ✅              | إضافة status + متابعة الدفع          |
+| حذف الحجز إذا ما تم الدفع خلال وقت محدد | ✅              | Cloud Function أو مؤقت               |
+| إظهار رسالة الدفع                       | 🔧             | تأكيد أن البيانات موجودة من Firebase |
+
+---
+
+لو حبيتي، نبدأ الآن بتنفيذ نقطة **التأكد من توفر الطاولات بشكل تلقائي قبل الحجز**، خطوة بخطوة، جاهزة؟

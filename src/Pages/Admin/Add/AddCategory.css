@@ -1,0 +1,120 @@
+.add-category-wrapper {
+  position: relative;
+  max-width: 600px;
+  margin: 60px auto; /* ✅ وسط الشاشة */
+  padding: 25px 30px;
+  border: 1px solid #e3e3e3;
+  border-radius: 10px;
+  background-color: #fff;
+
+  /* ✅ ظل ناعم */
+  box-shadow: 0 8px 16px rgba(58, 57, 57, 0.06);
+}
+
+.close-category-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.close-category-btn:hover {
+  color: #000;
+}
+
+.add-category-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.add-category-note {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.add-category-input {
+  display: block;
+  margin: 0 auto 15px;
+}
+
+.category-preview {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.category-preview-img {
+  width: 150px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.change-image-btn {
+  margin-top: 10px;
+  background-color: #eee;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.change-image-btn:hover {
+  background-color: #ddd;
+}
+
+.add-category-name {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.add-category-submit {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.add-category-submit:hover {
+  background-color: #45a049;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav-buttons button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: #f8f8f8;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.nav-buttons button:hover {
+  background-color: #eaeaea;
+  transform: translateY(-2px);
+}
