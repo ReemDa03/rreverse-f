@@ -23,12 +23,23 @@ export default async function handler(req, res) {
   }
 
   try {
+
+    console.log("➡️ Payload:", req.body);
+
     const docRef = db.collection("ReVerse").doc(slug);
     const docSnap = await docRef.get();
 
     if (!docSnap.exists) {
+
+         console.log("🚫 Restaurant not found:", slug);
+
+
       return res.status(404).json({ error: "Restaurant not found" });
     }
+
+    const data = docSnap.data();
+  console.log("📄 Firestore data:", data);
+
 
     const {
       stripeSecretKey,
@@ -62,8 +73,14 @@ export default async function handler(req, res) {
       cancel_url,
     });
 
+    console.log("✅ Session created:", session.id);
+
     res.status(200).json({ id: session.id });
   } catch (err) {
+    
+     console.error("❌ Stripe error:", err.message);
+  console.error(err); // 🧠 اطبعي كل تفاصيل الخطأ
+
     console.error("❌ Stripe error:", err.message);
     res.status(500).json({ error: "Server error" });
   }
