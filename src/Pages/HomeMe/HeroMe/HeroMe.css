@@ -1,0 +1,131 @@
+/* HeroMe.css */
+
+.hero-me {
+  background-image: url("https://res.cloudinary.com/dwupyymoc/image/upload/f_auto,q_auto,w_1920,c_fill/v1751501428/restaurant_hero_1920x960_vvvpgo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+  color: white;
+  overflow: hidden;
+  will-change: transform, opacity; /* boost GPU rendering */
+}
+
+.hero-me::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 40px 20px;
+  animation: fadeIn 1.2s ease-out;
+}
+
+/* 🎯 Responsive Vertical Centering */
+@media (min-height: 600px) {
+  .hero-content {
+    margin-top: 80px;
+  }
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+
+.hero-button {
+  background-color: #ff7a00;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.3);
+  transition: background-color 0.3s ease;
+}
+
+.hero-button:hover {
+  background-color: #e66a00;
+}
+
+/* ✨ Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📱 Responsive fonts for small screens */
+@media (max-width: 600px) {
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+  .hero-me {
+  height: 88vh;
+}
+
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+}
+/* 🌄 Background Fade + Scale */
+@keyframes heroBgAppear {
+  from {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-hero-bg {
+  animation: heroBgAppear 1s ease-out forwards;
+}
+
+/* ✨ Text Slide Up */
+@keyframes heroTextAppear {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-text {
+  animation: heroTextAppear 1s ease-out forwards;
+  animation-delay: 0.3s;
+}

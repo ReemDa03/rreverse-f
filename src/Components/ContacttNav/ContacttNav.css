@@ -1,0 +1,103 @@
+/* المودال الكامل */
+.contact-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* المربع الأبيض */
+.contact-container {
+  background: #fff;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: slideUp 0.4s ease forwards;
+}
+
+/* زر الإغلاق */
+.contact-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* النص الرئيسي */
+.contact-greeting {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.contact-greeting span {
+  display: block;
+  color: #666;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* الآيكونات */
+.contact-icons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.contact-icon {
+  font-size: 2.2rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.contact-icon:hover {
+  transform: scale(1.2);
+}
+
+.contact-icon.facebook {
+  color: #3b5998;
+}
+
+.contact-icon.instagram {
+  color: #e1306c;
+}
+
+.contact-icon.whatsapp {
+  color: #25d366;
+}
+
+/* حالة عدم وجود روابط */
+.contact-nodata,
+.contact-loading {
+  font-size: 1rem;
+  color: #999;
+  margin-top: 1.5rem;
+}
+
+.fade-in-slide {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeSlideUp 0.3s ease forwards;
+}
+
+@keyframes fadeSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

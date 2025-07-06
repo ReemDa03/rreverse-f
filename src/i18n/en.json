@@ -1,0 +1,412 @@
+{
+  "adminO": {
+    "hello": "Hello 👋",
+    "nowYouCan": "Now You Can",
+    "welcome": "Hi Admin!",
+    "loginPrompt": "Please enter your information to log in.",
+    "willLogInto": "You will log into"
+  },
+  "buttons": {
+    "login": "Login",
+    "goToAdmin": "Go to Admin Panel",
+    "logout": "Logout",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or",
+    "submit": "Place Order",
+    
+      "close": "Close",
+
+  "delete": "Delete"
+  },
+  "placeholders": {
+    "email": "Email",
+    "password": "Password"
+  },
+  "privacy": {
+    "agree": "I agree to the Privacy Policy"
+  },
+  "confirm": {
+    "logout": "Are you sure you want to log out?"
+  },
+  "errors": {
+    "privacyPolicy": "Please agree to the privacy policy!",
+    "storedProjectNotFound": "Stored project not found",
+    "sessionCheck": "Error while checking saved session",
+    "notAuthorized": "You do not have permission to access this project!",
+    "projectNotFound": "This project does not exist!",
+    "loginFailed": "Login failed!"
+  },
+  "messages": {
+    "loginSuccess": "Login successful!",
+    "loggedOut": "You have been logged out.",
+    "projectSwitched": "You switched to a different project. Please log in again."
+  }, 
+  "reservation": {
+    "title": "BOOK A TABLE",
+    "labels": {
+      "yourName": "Your Name",
+      "tableSize": "Choose Table Size",
+      "chooseADay": "Choose a Day",
+      "chooseATime": "Choose a Time"
+    },
+    
+    "info": {
+      "openingHours": "Opening Hours",
+      "additionalInfo": "Additional Info"
+    },
+    "errors": {
+      "requiredFields": "Please fill all required fields.",
+      "general": "Something went wrong."
+    }
+  },
+  "modal": {
+  "title": "Complete Your Payment",
+  "depositNotice": "A deposit of {{amount}}$ is required to confirm your reservation.",
+  "selectMethod": "Select Payment Method:",
+  "chooseMethod": "Choose Method",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "error": "Please select a payment method.",
+  "success": "Reservation confirmed successfully!",
+  "instructions": {
+    "vodafone": "Send the deposit to: {{number}}",
+    "paypal": "Send the deposit to: {{account}}",
+    "stripe": "Pay via Stripe: {{link}}",
+    "fawry": "Fawry Code: {{code}}"
+  }
+},
+"contact": {
+  "greeting": "Hi!",
+  "contactVia": "You can contact us via:",
+  "noData": "There is no data available",
+  "loading": "Uploading Data..."
+},
+"footer": {
+  "contactUs": "Contact Us",
+  "details": "Details",
+  "developedBy": "Developed by ReVerse"
+},
+
+"navbar": {
+  "menu": "Menu",
+  "cart": "Cart",
+  "contact_us": "Contact Us",
+  "admin_login": "Admin Login"
+},
+"sidemenu": {
+  "home": "Home",
+  "cart": "Cart",
+  "products": "Products",
+  "book_table": "Book a Table",
+  "about_us": "About Us",
+  "admin": "Admin",
+  "contact": "Let’s Contact"
+},
+"addCategory": {
+  "title": "Add Category",
+  "note": "Preferred image ratio is 1:1 (square)",
+  "previewAlt": "Category Preview",
+  "changeImage": "Change Image",
+  "namePlaceholder": "Category Name",
+  "submit": "Add Category",
+  "errors": {
+    "nameAndImage": "Please enter a category name and upload an image.",
+    "nameOnly": "Category name is required.",
+    "imageOnly": "Category image is required."
+  }
+},
+"addProduct": {
+  "back": "Back",
+  "tabs": {
+    "product": "Add Product",
+    "category": "Add Category",
+    "special": "Special Items"
+  },
+  "uploadImage": "Please upload main image:",
+  "name": "Product name:",
+  "namePlaceholder": "Product Name",
+  "description": "Product description:",
+  "descriptionPlaceholder": "Description",
+  "sizesTitle": "Select sizes and prices:",
+  "standard": "Standard",
+  "price": "Price",
+  "priceFor": "Price for",
+  "category": "Product Category:",
+  "selectCategory": "Select Category",
+  "submit": "Add Product"
+}
+,
+
+"special": {
+  "addSpecialItems": "Add Special Items",
+  "sectionTitlePlaceholder": "Special Section Title",
+  "saveTitle": "Save Title",
+  "name": "Name",
+  "description": "Description",
+  "oldPrice": "Old Price",
+  "price": "Price",
+  "uploadImage": "Upload Image",
+  "changeImage": "Change Image",
+  "addItem": "Add Item",
+  "confirmDeleteSection": "Are you sure you want to delete the entire section",
+  "confirmDeleteItem": "Are you sure you want to delete",
+  "fullDescription": "Full Description:"
+},
+"upgrade": {
+  "specialItemsTitle": "Special Items are Premium-only",
+  "description": "To access this feature and highlight your top dishes, please upgrade to the Premium Plan.",
+  "contactBtn": "Contact Us to Upgrade"
+},
+"bookings": {
+  "back": "Back",
+  "title": "Reservations Management",
+  "filters": {
+    "all": "All",
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "rejected": "Rejected"
+  },
+  "table": {
+    "name": "Name",
+    "seats": "Seats",
+    "date": "Date",
+    "time": "Time",
+    "payment": "Payment",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "noBookings": "There are no future bookings.",
+  "confirmDelete": "Are you sure you want to delete this booking?"
+},
+"categories": {
+  "title": "Category List",
+  "noCategories": "No categories found.",
+  "count": "{{count}} product(s)",
+  "confirmDelete": "Are you sure you want to delete \"{{name}}\"?"
+},
+"products": {
+  "title": "Product List",
+  "filterByCategory": "Filter by Category:",
+  "noProducts": "No products found.",
+  "fullDescription": "Full Description:",
+  "confirmDelete": "Are you sure you want to delete \"{{name}}\"?"
+},
+"orders": {
+  "back": "Back",
+  "title": "Welcome to Admin Panel for: {{slug}}",
+  "count": "Orders: {{count}}",
+  "note": "Note that the orders older than the most recent 80 will be automatically deleted to maintain performance.",
+  "filterByStatus": "Filter by Status:",
+  "orderType": "Order Type:",
+  "header": "{{index}}. Items {{count}} – Date: {{date}} – {{status}}",
+  "item": "🍽 {{name}} | {{size}} | quantity: {{quantity}} | ${{price}}",
+  "notes": "Notes",
+  "total": "Total",
+  "name": "Name",
+  "address": "Address",
+  "phone": "Phone",
+  "tableNumber": "Table Number",
+  
+  "payment": "Payment",
+  "paidOnline": "✅ Paid Online",
+  "unpaidOnline": "❗ Unpaid - Online Selected",
+  "cashOnDelivery": "💵 Cash on Delivery",
+  "changeStatus": "Order Status:",
+  "cancelled": "This order is cancelled",
+  "delete": "Delete"
+},
+"admin": {
+  "title": "Admin Panel - {{slug}}",
+  "name": "Name",
+  "email": "Email",
+  "logout": "Logout",
+  "add": "Add",
+  "list": "Product List",
+  "orders": "Orders",
+  "bookings": "Bookings",
+  "back": "Back",
+  "logoutConfirm": "Are you sure you want to logout?",
+  "logoutYes": "Yes, Logout",
+  "cancel": "Cancel"
+},
+"cart": {
+  "totalTitle": "Cart Total",
+  "subtotal": "Subtotal",
+  "deliveryFee": "Delivery Fee",
+  "total": "Total",
+  "inside": "I'm dining inside",
+  "outside": "I want delivery",
+   "price": "Price",
+  "size": "Size",
+   "emptyMessage": "Your cart is currently empty. Please add some products to your cart.",
+  "fullDescription": "Product Description"
+},
+"delivery": {
+    "title": "Delivery Details",
+    "instruction": "Please fill these fields",
+    "namePlaceholder": "Full Name",
+    "phonePlaceholder": "Phone Number",
+    "addressPlaceholder": "Address",
+    "notesPlaceholder": "Any notes or requests?",
+    "errorMsg": "Please fill all required fields.",
+    "proceedBtn": "Proceed to Checkout"
+  },
+  "dinein": {
+    "title": "Dine-In Details",
+    "instruction": "Please fill these fields",
+    "label": "Type your table number:",
+    "placeholder": "Enter your table number",
+    "notesPlaceholder": "Any notes or requests?",
+    "errorMsg": "Please select a table number.",
+    "proceedBtn": "Proceed to Checkout"
+  },
+   "payment": {
+    "title": "Select Payment Method",
+    "cash": "Confirm Cash Payment",
+    "cancel": "Cancel"
+  },
+  "productList": {
+    "noProduct": "There is no product",
+    "priceLabel": "Price",
+    "viewMore": "View More ▼",
+    "viewLess": "View Less ▲"
+  },
+
+  "navbarMe": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "clients": "Our Clients",
+    "getStarted": "Get Started Now"
+  },
+
+  "heroMe": {
+    "title": "Smart Online Ordering System for Restaurants and Cafés",
+    "subtitle": "Provide a branded experience for your customers with a custom online ordering and reservation website.",
+    "button": "Get Started Now"
+  },
+  "features": {
+    "title1": "What is ReVerse?",
+    "description": "ReVerse is a web-based platform designed for restaurants and cafés, offering customer online ordering and reservation websites. It allows businesses to create a unique brand identity online, manage orders and reservations efficiently through an intuitive admin panel, and enhance customer experience with seamless online interaction.",
+    "title2": "Everything you need to run your restaurant online",
+    "cards": [
+      {
+        "title": "Custom Branding",
+        "description": "Create a unique online experience that reflects your brand’s identity."
+      },
+      {
+        "title": "Online Order Management",
+        "description": "Manage incoming orders in real-time with instant admin notifications."
+      },
+      {
+        "title": "Booking & Reservations",
+        "description": "Streamline your reservation process with an integrated booking module."
+      },
+      {
+        "title": "Products & Categories Control",
+        "description": "Easily organize and update your menu with product and category management."
+      },
+      {
+        "title": "Admin Dashboard with Secure Login",
+        "description": "Access a secure admin dashboard with Firebase authentication."
+      },
+      {
+        "title": "Multilingual Support",
+        "description": "Support both English and Arabic to serve a wider customer base."
+      },
+      {
+        "title": "Web-Hosted",
+        "description": "Your website is hosted online — no need for a separate app."
+      },
+      {
+        "title": "Fast 24h Delivery",
+        "description": "Get your custom platform up and running within 24 hours."
+      }
+    ]
+  },
+
+  "pricing": {
+    "title": "Pricing that fits your business",
+    "month": "month",
+    "startNow": "Start Now",
+    "cta": "Try ReVerse for 1 week — absolutely free. \nIf you like it, subscribe anytime!",
+    "plans": {
+      "basic": {
+        "title": "Basic",
+        "price": "$25",
+        "features": [
+          "Online ordering website",
+          "Unlimited orders",
+          "Mobile-friendly design"
+        ]
+      },
+      "pro": {
+        "title": "Premium",
+        "price": "$50",
+        "features": [
+          "Highlight top 3 dishes/drinks",
+          "Online payments via Stripe",
+          "Everything in Basic"
+        ]
+      },
+      "vip": {
+        "title": "VIP Custom",
+        "price": "VIP",
+        "features": [
+          "Custom-built full website",
+          "Dedicated account manager",
+          "Full ownership & code"
+        ]
+      }
+    }
+  },
+
+  "clients": {
+    "title": "Our Clients",
+    "description": "Explore real examples of restaurants and cafes already using ReVerse to power their online ordering and reservations.",
+    "cta": "Get Started Now",
+    "viewMore": "All Clients",
+    "hide": "Hide Clients"
+  },
+
+  "footerMe": {
+    "title": "Why choose ReVerse?",
+    "description": "We provide comprehensive solutions for restaurants and cafés looking to establish a strong online presence.",
+    "features": {
+      "fast": {
+        "title": "Fast Setup",
+        "desc": "Get your website up and running in no time with our intuitive platform."
+      },
+      "pricing": {
+        "title": "Affordable Pricing",
+        "desc": "Competitive pricing plans to fit businesses of all sizes."
+      },
+      "ui": {
+        "title": "Professional UI",
+        "desc": "Modern and customizable templates to showcase your brand."
+      },
+      "responsive": {
+        "title": "Responsive Design",
+        "desc": "Websites that look great on any device — from desktop to smartphone."
+      },
+      "support": {
+        "title": "Dedicated Support",
+        "desc": "Our team is here to assist you every step of the way."
+      }
+    },
+    "cta": {
+      "title": "Ready to boost your business?",
+      "description": "Contact us today to get your own Website live in 24h. ReVerse can help your restaurant thrive.",
+      "button": "Contact Us"
+    },
+    "copyright": "All rights reserved."
+  }
+
+
+  
+
+
+
+
+
+}

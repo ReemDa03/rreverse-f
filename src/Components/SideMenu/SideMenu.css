@@ -1,0 +1,112 @@
+.side-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: flex-end;
+  align-items: start;
+  z-index: 100;
+  transition: opacity 0.3s ease;
+}
+
+.side-overlay.fade-in {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.side-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidemenu {
+  margin: 2rem;
+  padding: 1.5rem 1.5rem 2rem;
+  background-color: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 360px;
+  width: fit-content;
+  position: relative;
+  animation: slideIn 0.3s ease forwards;
+}
+
+.sidemenu.slide-out {
+  animation: slideOut 0.3s ease forwards;
+}
+
+.close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 25px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+
+.sidemenu ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+    padding-top: 1.5rem; /* ✅ هاي هي المسافة المطلوبة */
+}
+
+.close-btn:hover {
+  background: transparent !important;
+  color: inherit !important;
+  box-shadow: none !important;
+}
+
+.sidemenu button {
+  width: 100%;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  padding: 0.8rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.sidemenu button:hover {
+  background-color: #f1f5f9;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+}
