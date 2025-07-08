@@ -81,14 +81,15 @@ if (isBooking && reservationId && slug) {
           price_data: {
             currency: currency || docCurrency || "usd",
             product_data: { name: "Order Total" },
-            unit_amount: total * 100,
+            total: settings.depositAmount * 100
+
           },
           quantity: 1,
         },
       ],
       mode: "payment",
-       success_url: successUrl, // ⚠️ متغيرة حسب النوع
-  cancel_url: cancelUrl,
+       success_url, // ⚠️ متغيرة حسب النوع
+  cancel_url,
     });
 
 console.log("✅ Stripe Success URL:", success_url);
