@@ -59,9 +59,10 @@ export default async function handler(req, res) {
 
     // ✅ تخصيص روابط النجاح والإلغاء عند الحجز
     if (isBooking && reservationId) {
-      successUrl = `https://rreverse-f.vercel.app/stripe-booking-success?session_id={CHECKOUT_SESSION_ID}&slug=${slug}&reservationId=${reservationId}`;
-      cancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
-    }
+  successUrl = `https://rreverse-f.vercel.app/stripe-booking-success?slug=${slug}&reservationId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`;
+  cancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
+}
+
 
     // ✅ تحديد المبلغ حسب نوع العملية
     const unitAmount = isBooking
