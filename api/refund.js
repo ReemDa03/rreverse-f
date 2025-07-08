@@ -1,8 +1,15 @@
 import Stripe from "stripe";
-import { db } from "../firebaseAdmin"; // ✅ صار يستدعي admin SDK
-import { doc, updateDoc } from "firebase-admin/firestore"; // من admin
+import admin from "firebase-admin";
 
+// ✅ تهيئة Firebase Admin SDK لمرة وحدة
+if (!admin.apps.length) {
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
 
+const db = admin.firestore();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
@@ -17,8 +24,8 @@ export default async function handler(req, res) {
     });
 
     // تحديث حالة الحجز في Firestore
-    const ref = doc(db, "ReVerse", slug, "bookTable", reservationId);
-    await updateDoc(ref, {
+    const ref = db.collection("ReVerse").doc(slug).collection("bookTable").doc(reservationId);
+    await ref.update({
       paymentStatus: "refunded",
       refundId: refund.id,
     });
