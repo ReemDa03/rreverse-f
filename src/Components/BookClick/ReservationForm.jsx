@@ -59,8 +59,7 @@ function ReservationForm({ slug }) {
   setShowModal(true);
 };
 
-  if (!settings) return null;
-
+ 
   useEffect(() => {
   const checkPendingReservation = () => {
     const stored = localStorage.getItem("pendingReservation");
@@ -79,6 +78,9 @@ function ReservationForm({ slug }) {
 
   checkPendingReservation();
 }, []);
+
+
+ if (!settings) return null;
 
 
   return (
