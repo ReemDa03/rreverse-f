@@ -67,7 +67,7 @@ function SpecialItems({
               style={{ animationDelay: `${i * 0.2}s` }}
             >
               <img
-                loading="lazy"
+               
                 className="menu-item__image"
                 src={item.image}
                 alt={item.name}

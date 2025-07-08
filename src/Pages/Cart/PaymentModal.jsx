@@ -3,9 +3,10 @@ import "./PaymentModal.css";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-const PaymentModal = ({ onClose, onConfirm, onCardPayment }) => {
+const PaymentModal = ({ onClose, onConfirm, onCardPayment, planType }) => {
   const { t } = useTranslation();
   const [selectedMethod, setSelectedMethod] = useState("");
+  
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -24,17 +25,23 @@ const PaymentModal = ({ onClose, onConfirm, onCardPayment }) => {
 
         <div className="payment-options">
           <button
-            className={`method-btn ${selectedMethod === "cash" ? "active" : ""}`}
+            className={`method-btn ${
+              selectedMethod === "cash" ? "active" : ""
+            }`}
             onClick={() => setSelectedMethod("cash")}
           >
             💵 {t("payment.cash")}
           </button>
-          <button
-            className={`method-btn ${selectedMethod === "card" ? "active" : ""}`}
-            onClick={() => setSelectedMethod("card")}
-          >
-            💳 {t("payment.card")}
-          </button>
+          {planType === "premium" && (
+            <button
+              className={`method-btn ${
+                selectedMethod === "card" ? "active" : ""
+              }`}
+              onClick={() => setSelectedMethod("card")}
+            >
+              💳 {t("payment.card")}
+            </button>
+          )}
         </div>
 
         {selectedMethod && (
@@ -42,7 +49,10 @@ const PaymentModal = ({ onClose, onConfirm, onCardPayment }) => {
             className="confirm-btn"
             onClick={selectedMethod === "cash" ? onConfirm : onCardPayment}
           >
-            ✅ {selectedMethod === "cash" ? t("payment.confirmCash") : t("payment.confirmCard")}
+            ✅{" "}
+            {selectedMethod === "cash"
+              ? t("payment.confirmCash")
+              : t("payment.confirmCard")}
           </button>
         )}
 

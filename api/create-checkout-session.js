@@ -26,21 +26,19 @@ export default async function handler(req, res) {
 
   try {
 
-    console.log("➡️ Payload:", req.body);
+   
 
     const docRef = db.collection("ReVerse").doc(slug);
     const docSnap = await docRef.get();
 
     if (!docSnap.exists) {
 
-         console.log("🚫 Restaurant not found:", slug);
-
-
+        
       return res.status(404).json({ error: "Restaurant not found" });
     }
 
     const data = docSnap.data();
-  console.log("📄 Firestore data:", data);
+ 
 
 
     const {
@@ -52,11 +50,6 @@ export default async function handler(req, res) {
 
     
 // 🪵 Debug log
-console.log("🔍 Total:", total);
-console.log("🔍 Slug:", slug);
-console.log("🔍 stripeSecretKey:", stripeSecretKey);
-console.log("🔍 success_url:", success_url);
-console.log("🔍 cancel_url:", cancel_url);
 
     if (!stripeSecretKey || !success_url || !cancel_url) {
       return res.status(400).json({ error: "Stripe data missing" });
@@ -83,15 +76,12 @@ console.log("🔍 cancel_url:", cancel_url);
       cancel_url,
     });
 
-    console.log("✅ Session created:", session.id);
+  
 
     res.status(200).json({ id: session.id });
   } catch (err) {
 
-     console.error("❌ Stripe error:", err.message);
-  console.error(err); // 🧠 اطبعي كل تفاصيل الخطأ
-
-    console.error("❌ Stripe error:", err.message);
+   
     res.status(500).json({ error: "Server error" });
   }
 }

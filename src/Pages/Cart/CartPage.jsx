@@ -41,6 +41,9 @@ const CartPage = () => {
   const [restaurantData, setRestaurantData] = useState(null);
   const { slug } = useParams();
 
+  const planType = restaurantData?.plan || "basic";
+
+
 
  const handleCardPayment = async () => {
   try {
@@ -232,6 +235,7 @@ const CartPage = () => {
                 onConfirm={handleCashPayment}
                 onClose={() => setShowCashModal(false)}
                 onCardPayment={handleCardPayment}
+                planType={planType}
               />
             </AnimatePresence>
           )}
