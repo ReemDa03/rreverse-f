@@ -18,7 +18,7 @@ import "./index.css";
 import { useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
-import StripeRedirect from "./Pages/StripeRedirect";
+
 
 import StripeRedirectWrapper from "./Pages/StripeRedirectWrapper";
 
@@ -66,7 +66,7 @@ const App = () => {
         <Route path="payMethod" element={<PayMethod />} />
         
       </Route>
-      <Route path="/stripe-redirect" element={<StripeRedirect />} />
+      
         <Route path="/stripe-redirect" element={<StripeRedirectWrapper />} />
 
     </Routes>
