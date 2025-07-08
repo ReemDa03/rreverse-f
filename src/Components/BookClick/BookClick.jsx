@@ -103,7 +103,7 @@ onBookingSuccess();
 
 setTimeout(() => {
   onClose();
-}, 3500); // 1.5 ثانية تأخير
+}, 2300); // 1.5 ثانية تأخير
 
   } catch (err) {
     console.error("Error saving cash booking:", err);

@@ -23,7 +23,6 @@ import axios from "axios"; // إذا ما كنتِ ضايفته
 
 import { useLocation } from "react-router-dom";
 
-
 const CartPage = () => {
   const { t } = useTranslation();
 
@@ -47,39 +46,44 @@ const CartPage = () => {
 
   const planType = restaurantData?.plan || "basic";
 
-
-  
-  
-  
-
   useEffect(() => {
-  const queryParams = new URLSearchParams(location.search);
-  const paymentStatus = queryParams.get("payment");
+    const queryParams = new URLSearchParams(location.search);
+    const paymentStatus = queryParams.get("payment");
 
-  if (paymentStatus === "success") {
-    clearCart();
-    toast.success("✅ Your order has been received and is now being prepared!");
-  }
+    if (paymentStatus === "success") {
+      clearCart();
+      toast.success(
+        "✅ Your order has been received and is now being prepared!"
+      );
+    }
 
-  if (paymentStatus === "cancel") {
-    toast.error("❌ Payment was canceled or failed.");
-  }
-}, [location.search]);
+    if (paymentStatus === "cancel") {
+      toast.error("❌ Payment was canceled or failed.");
+    }
+  }, [location.search]);
 
-
-  
-
- const handleCardPayment = async () => {
+  const handleCardPayment = async () => {
   try {
-    if (!restaurantData?.stripePublicKey || !restaurantData?.success_url || !restaurantData?.cancel_url) {
+    if (
+      !restaurantData?.stripePublicKey ||
+      !restaurantData?.success_url ||
+      !restaurantData?.cancel_url
+    ) {
       toast.error("Stripe data missing. Please contact the restaurant.");
       return;
     }
 
+    const orderId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
     const res = await axios.post("/api/create-checkout-session", {
       total: total,
-      currency: restaurantData.currency || "usd", // حسب العملة من Firestore
-      slug: slug, // نبعته عشان السيرفر يجيب بياناته لحاله
+      currency: restaurantData.currency || "usd",
+      slug: slug,
+      isBooking: false, // ✅ هذا الفرق بين الحجز والطلب
+      reservationId: orderId, // نستخدمه كـ orderId
+      name: userName,
+      phone: userPhone,
+      cartItems: cartItems, // ✅ أرسل السلة
     });
 
     const sessionId = res.data.id;
@@ -87,10 +91,9 @@ const CartPage = () => {
     await stripe.redirectToCheckout({ sessionId });
   } catch (err) {
     console.error("Stripe Error:", err);
-    toast.error(t("payment.errorCard")); // وترجميها مثلاً إلى: "تعذر بدء عملية الدفع، يرجى المحاولة لاحقًا."
+    toast.error(t("payment.errorCard"));
   }
 };
-
 
   // ✅ تحميل بيانات المنتجات
   useEffect(() => {
@@ -154,7 +157,7 @@ const CartPage = () => {
       paymentMethod: "cash",
       paymentStatus: "pending",
       createdAt: serverTimestamp(),
-       isSeen: false, // ✅ أضف هذا السطر لتمييز الطلب الجديد
+      isSeen: false, // ✅ أضف هذا السطر لتمييز الطلب الجديد
     };
 
     try {

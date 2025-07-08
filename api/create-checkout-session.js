@@ -70,9 +70,12 @@ export default async function handler(req, res) {
     let finalCancelUrl = cancel_url || fallbackCancelUrl;
 
     if (isBooking && reservationId) {
-      finalSuccessUrl = `https://rreverse-f.vercel.app/stripe-booking-success?slug=${slug}&reservationId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`;
-      finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
-    }
+  finalSuccessUrl = `https://rreverse-f.vercel.app/stripe-booking-success?slug=${slug}&reservationId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`;
+  finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
+} else {
+  finalSuccessUrl = `https://rreverse-f.vercel.app/stripe-order-success?slug=${slug}&orderId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`;
+  finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
+}
 
     // ✅ تحديد السعر: هل هو مبلغ الحجز أم مبلغ طلب عادي؟
     const unitAmount = isBooking
@@ -99,15 +102,23 @@ export default async function handler(req, res) {
       ],
       // ✅ تمرير بيانات الحجز داخل metadata حتى نسترجعها لاحقًا من Stripe
       metadata: isBooking
-        ? {
-            slug,
-            reservationId,
-            name,
-            tableSize,
-            date,
-            time,
-          }
-        : {},
+  ? {
+      slug,
+      reservationId,
+      name,
+      tableSize,
+      date,
+      time,
+    }
+  : {
+      slug,
+      orderId: reservationId, // نفسه orderId
+      name,
+      phone,
+      cart: JSON.stringify(cartItems),
+      total,
+    },
+
     });
 
     console.log("✅ Stripe Session Created:", session.id);
