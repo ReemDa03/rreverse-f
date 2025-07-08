@@ -67,7 +67,7 @@ export default async function handler(req, res) {
         paymentStatus: "paid",
         paymentMethod: "Stripe",
         createdAt: Timestamp.now(),
-        stripeSessionId: session_id,
+        stripeSessionId: sessionId,
         paymentIntentId: session.payment_intent,
       },
       { merge: true }
