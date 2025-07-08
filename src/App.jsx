@@ -62,9 +62,10 @@ const App = () => {
         <Route path="orders" element={<OrdersPage />} />
         <Route path="booking" element={<AdminBookings />} />
         <Route path="payMethod" element={<PayMethod />} />
-        <Route path="/stripe-redirect" element={<StripeRedirect />} />
-
+        
       </Route>
+      <Route path="/stripe-redirect" element={<StripeRedirect />} />
+
     </Routes>
     </AnimatePresence>
   );
