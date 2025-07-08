@@ -62,9 +62,16 @@ const BookClick = ({ onClose, settings, reservationId, slug }) => {
     const data = await res.json();
 
     if (data.id) {
-      window.location.href = data.url;
+  const ref = doc(db, "ReVerse", slug, "bookTable", reservationId);
+  await updateDoc(ref, {
+    paymentMethod: "Stripe",
+    paymentIntentId: data.id, // لازم Stripe يرجع session.payment_intent في الـ API
+    paymentStatus: "pending",
+  });
 
-    } else {
+  window.location.href = data.url;
+}
+ else {
       toast.error("Something went wrong with Stripe.");
     }
 
@@ -89,23 +96,24 @@ const BookClick = ({ onClose, settings, reservationId, slug }) => {
         </p>
 
         <label className="modal-label">{t("modal.selectMethod")}</label>
-        <select
-          className={`modal-select ${
-            triedToSubmit && !paymentMethod ? "error-border" : ""
-          }`}
-          value={paymentMethod}
-          onChange={(e) => {
-            setPaymentMethod(e.target.value);
-            setTriedToSubmit(false);
-          }}
-        >
-          <option value="">{t("modal.chooseMethod")}</option>
-          {settings.paymentOptions?.map((method, i) => (
-            <option key={i} value={method}>
-              {method}
-            </option>
-          ))}
-        </select>
+<div className="payment-buttons">
+  <button
+    className={`method-btn ${paymentMethod === "Cash" ? "active" : ""}`}
+    onClick={() => setPaymentMethod("Cash")}
+  >
+    💵 Pay with Cash
+  </button>
+  <button
+    className={`method-btn ${paymentMethod === "Stripe" ? "active" : ""}`}
+    onClick={() => setPaymentMethod("Stripe")}
+  >
+    💳 Pay with Card
+  </button>
+</div>
+{triedToSubmit && !paymentMethod && (
+  <p className="error-msg">{t("modal.error")}</p>
+)}
+
 
         {paymentMethod && getPaymentInstructions() && (
           <p className="payment-instructions">{getPaymentInstructions()}</p>

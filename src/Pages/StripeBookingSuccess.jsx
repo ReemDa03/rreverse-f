@@ -29,6 +29,8 @@ const StripeBookingSuccess = () => {
 
         if (res.ok) {
           toast.success("✅ تم تأكيد الحجز بنجاح!");
+          toast.success("✅ تم استلام الحجز بنجاح! سيتم استرداد المبلغ خلال 24 ساعة في حال تم رفض الحجز.");
+
         } else {
           toast.error(data.error || "❌ حدث خطأ أثناء تأكيد الحجز.");
         }
