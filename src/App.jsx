@@ -18,6 +18,7 @@ import "./index.css";
 import { useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
+import StripeRedirect from "./Pages/StripeRedirect";
 
 
 const App = () => {
@@ -61,6 +62,8 @@ const App = () => {
         <Route path="orders" element={<OrdersPage />} />
         <Route path="booking" element={<AdminBookings />} />
         <Route path="payMethod" element={<PayMethod />} />
+        <Route path="/stripe-redirect" element={<StripeRedirect />} />
+
       </Route>
     </Routes>
     </AnimatePresence>
