@@ -88,7 +88,8 @@ export default async function handler(req, res) {
     console.log("✅ Stripe Success URL:", successUrl);
     console.log("❌ Stripe Cancel URL:", cancelUrl);
 
-    res.status(200).json({ id: session.id });
+    res.status(200).json({ id: session.id, url: session.url });
+
   } catch (err) {
     console.error("❌ Stripe Error:", err);
     res.status(500).json({ error: "Server error" });
