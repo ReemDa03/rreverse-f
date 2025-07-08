@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   const { paymentIntentId, slug, reservationId } = req.body;
 
   try {
-    // ✅ Get stripe secret key from Firestore
+    // ✅ جلب stripeSecretKey من Firestore
     const docRef = db.collection("ReVerse").doc(slug);
     const docSnap = await docRef.get();
 
@@ -25,8 +25,7 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "Restaurant not found" });
     }
 
-    const restaurantData = docSnap.data();
-    const stripeSecretKey = restaurantData.stripeSecretKey;
+    const stripeSecretKey = docSnap.data().stripeSecretKey;
 
     if (!stripeSecretKey) {
       return res.status(400).json({ error: "Stripe secret key missing" });
@@ -36,25 +35,42 @@ export default async function handler(req, res) {
       apiVersion: "2023-10-16",
     });
 
-    // ✅ Issue refund
+    // ✅ تنفيذ الاسترداد
     const refund = await stripe.refunds.create({
       payment_intent: paymentIntentId,
     });
 
-    // ✅ Update Firestore
-    await db
-      .collection("ReVerse")
-      .doc(slug)
-      .collection("bookTable")
-      .doc(reservationId)
-      .update({
-        paymentStatus: "refunded",
-        refundId: refund.id,
-      });
+    // ✅ فقط إذا نجح الاسترداد، نحدث الحالة في Firestore
+    if (refund.status === "succeeded") {
+      await db
+        .collection("ReVerse")
+        .doc(slug)
+        .collection("bookTable")
+        .doc(reservationId)
+        .update({
+          paymentStatus: "refunded",
+          refundId: refund.id,
+        });
 
-    return res.status(200).json({ message: "تم الاسترداد بنجاح" });
+      return res.status(200).json({ message: "تم الاسترداد بنجاح" });
+    } else {
+      return res
+        .status(400)
+        .json({ error: "فشل في تنفيذ الاسترداد من Stripe" });
+    }
   } catch (error) {
     console.error("Refund Error:", error);
+
+    // 🟠 لو Stripe قال إنو الدفع تم استرداده مسبقًا
+    if (
+      error.code === "charge_already_refunded" ||
+      error.raw?.code === "charge_already_refunded"
+    ) {
+      return res
+        .status(400)
+        .json({ error: "هذا الدفع تم استرداده مسبقًا." });
+    }
+
     return res.status(500).json({ error: "فشل في الاسترداد" });
   }
 }

@@ -28,10 +28,40 @@ const StripeBookingSuccess = () => {
         const data = await res.json();
 
         if (res.ok) {
-  toast.success("✅ تم تأكيد الحجز بنجاح!");
-  toast.info("💳 سيتم إعادة المبلغ خلال 24 ساعة في حال تم رفض الحجز.");
+          toast.success("✅ تم تأكيد الحجز بنجاح!");
+          toast.info("💳 سيتم إعادة المبلغ خلال 24 ساعة في حال تم رفض الحجز.");
+
+          // ✅ بعد نجاح الدفع، أرسل الحجز إلى Firestore
+          const stored = localStorage.getItem("pendingReservation");
+let bookingData = null;
+
+if (stored) {
+  const parsed = JSON.parse(stored);
+  const savedTime = new Date(parsed.createdAt).getTime();
+  const now = Date.now();
+
+  if (now - savedTime < 5 * 60 * 1000) {
+    bookingData = parsed; // ✅ فقط إذا أقل من 5 دقايق
+  } else {
+    localStorage.removeItem("pendingReservation"); // منتهية الصلاحية
+  }
 }
- else {
+
+          if (bookingData) {
+  await fetch("/api/save-booking-after-stripe", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...bookingData,
+      slug,
+      reservationId,
+    }),
+  });
+
+  localStorage.removeItem("pendingReservation");
+}
+
+        } else {
           toast.error(data.error || "❌ حدث خطأ أثناء تأكيد الحجز.");
         }
       } catch (err) {
@@ -40,8 +70,6 @@ const StripeBookingSuccess = () => {
 
       setTimeout(() => {
         navigate(`/reverse/${slug}`, { replace: true });
-
-
       }, 4000);
     };
 

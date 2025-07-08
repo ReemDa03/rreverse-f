@@ -37,15 +37,21 @@ const BookClick = ({ onClose, settings, reservationId, slug }) => {
   };
 
   const handleConfirm = async () => {
-    if (!paymentMethod) {
-      setTriedToSubmit(true);
-      toast.error(t("modal.error"));
-      return;
-    }
+  if (!paymentMethod) {
+    setTriedToSubmit(true);
+    toast.error(t("modal.error"));
+    return;
+  }
 
-    
+  const tempReservation = JSON.parse(localStorage.getItem("pendingReservation"));
+  if (!tempReservation) {
+    toast.error("لا يوجد بيانات حجز محفوظة.");
+    return;
+  }
+
   if (paymentMethod === "Stripe") {
-    // ✅ نوجه المستخدم لـ Stripe
+    const reservationId = Math.random().toString(36).substring(2, 10); // ID مؤقت
+
     const res = await fetch("/api/create-checkout-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -53,39 +59,42 @@ const BookClick = ({ onClose, settings, reservationId, slug }) => {
         total: settings.depositAmount,
         currency: settings.currency || "usd",
         slug,
-        // إضافات مهمة:
         reservationId,
-        isBooking: true, // تمييز نوع الطلب
+        isBooking: true,
       }),
     });
 
     const data = await res.json();
 
     if (data.id) {
-  const ref = doc(db, "ReVerse", slug, "bookTable", reservationId);
-  await updateDoc(ref, {
-    paymentMethod: "Stripe",
-    paymentIntentId: data.id, // لازم Stripe يرجع session.payment_intent في الـ API
-    paymentStatus: "pending",
-  });
-
-  window.location.href = data.url;
-}
- else {
-      toast.error("Something went wrong with Stripe.");
+      localStorage.setItem("reservationId", reservationId);
+      localStorage.setItem("selectedPaymentMethod", "Stripe");
+      window.location.href = data.url;
+    } else {
+      toast.error("حدث خطأ أثناء تجهيز الدفع.");
     }
 
     return;
   }
 
-
-    const ref = doc(db, "ReVerse", slug, "bookTable", reservationId);
-    await updateDoc(ref, { paymentMethod });
+  // ✅ لو Cash → أرسل الآن للـ Firestore
+  try {
+    const ref = collection(doc(db, "ReVerse", slug), "bookTable");
+    const newDoc = await addDoc(ref, {
+      ...tempReservation,
+      createdAt: Timestamp.now(),
+      paymentMethod: "Cash",
+      status: "pending",
+    });
 
     toast.success(t("modal.success"));
+    localStorage.removeItem("pendingReservation");
     onClose();
-  };
-
+  } catch (err) {
+    console.error("Error saving cash booking:", err);
+    toast.error("فشل في إنشاء الحجز.");
+  }
+};
   return (
     <div className="modal-overlay">
       <div className={`modal-content ${show ? "fade-scale-in" : ""}`}>
@@ -96,24 +105,25 @@ const BookClick = ({ onClose, settings, reservationId, slug }) => {
         </p>
 
         <label className="modal-label">{t("modal.selectMethod")}</label>
-<div className="payment-buttons">
-  <button
-    className={`method-btn ${paymentMethod === "Cash" ? "active" : ""}`}
-    onClick={() => setPaymentMethod("Cash")}
-  >
-    💵 Pay with Cash
-  </button>
-  <button
-    className={`method-btn ${paymentMethod === "Stripe" ? "active" : ""}`}
-    onClick={() => setPaymentMethod("Stripe")}
-  >
-    💳 Pay with Card
-  </button>
-</div>
-{triedToSubmit && !paymentMethod && (
-  <p className="error-msg">{t("modal.error")}</p>
-)}
-
+        <div className="payment-buttons">
+          <button
+            className={`method-btn ${paymentMethod === "Cash" ? "active" : ""}`}
+            onClick={() => setPaymentMethod("Cash")}
+          >
+            💵 Pay with Cash
+          </button>
+          <button
+            className={`method-btn ${
+              paymentMethod === "Stripe" ? "active" : ""
+            }`}
+            onClick={() => setPaymentMethod("Stripe")}
+          >
+            💳 Pay with Card
+          </button>
+        </div>
+        {triedToSubmit && !paymentMethod && (
+          <p className="error-msg">{t("modal.error")}</p>
+        )}
 
         {paymentMethod && getPaymentInstructions() && (
           <p className="payment-instructions">{getPaymentInstructions()}</p>

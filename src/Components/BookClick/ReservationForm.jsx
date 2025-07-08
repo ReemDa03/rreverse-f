@@ -37,39 +37,49 @@ function ReservationForm({ slug }) {
   }, [slug]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!name || !date || !time) {
-      toast.error(t("reservation.errors.requiredFields"));
-      return;
-    }
+  if (!name || !date || !time) {
+    toast.error(t("reservation.errors.requiredFields"));
+    return;
+  }
 
-    try {
-      const ref = collection(doc(db, "ReVerse", slug), "bookTable");
-      const newDoc = await addDoc(ref, {
-        name,
-        tableSize,
-        date,
-        time,
-        depositAmount: settings.depositAmount,
-        createdAt: Timestamp.now(),
-        status: "pending",
-      });
+  // ✅ خزني البيانات مؤقتًا بدل إرسالها لـ Firestore
+  const tempReservation = {
+    name,
+    tableSize,
+    date,
+    time,
+    depositAmount: settings.depositAmount,
+    createdAt: new Date().toISOString(),
+  };
 
-      setReservationId(newDoc.id);
-      setShowModal(true);
+  localStorage.setItem("pendingReservation", JSON.stringify(tempReservation));
 
-      setTableSize("2");
-      setDate("");
-      setTime("08:00 PM");
-      setName("");
-    } catch (err) {
-      console.error("Reservation error:", err);
-      toast.error(t("reservation.errors.general"));
+  setShowModal(true);
+};
+
+  if (!settings) return null;
+
+  useEffect(() => {
+  const checkPendingReservation = () => {
+    const stored = localStorage.getItem("pendingReservation");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      const savedTime = new Date(parsed.createdAt).getTime();
+      const now = Date.now();
+
+      const diffInMs = now - savedTime;
+      if (diffInMs > 60 * 1000) {
+        // مضى أكثر من دقيقة
+        localStorage.removeItem("pendingReservation");
+      }
     }
   };
 
-  if (!settings) return null;
+  checkPendingReservation();
+}, []);
+
 
   return (
     <section id="book" className="reservation-section" ref={sectionRef}>
