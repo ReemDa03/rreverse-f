@@ -1,6 +1,7 @@
 import { useEffect, useContext, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
 import { StoreContext } from "../context/StoreContext";
 
 const StripeRedirect = () => {
@@ -18,11 +19,32 @@ const StripeRedirect = () => {
     const queryParams = new URLSearchParams(location.search);
     const paymentStatus = queryParams.get("payment");
     const slug = queryParams.get("slug");
-    const reservationId = queryParams.get("reservationId"); // ✅ نضيفها هون
+    const reservationId = queryParams.get("reservationId");
+    const sessionId = queryParams.get("session_id"); // ✅ الجلسة من Stripe
+
+    const handleSuccess = async () => {
+      try {
+        if (sessionId && slug && reservationId) {
+          await axios.post("/api/stripe-session-info", {
+            sessionId,
+            slug,
+            orderId: reservationId, // ✅ لأنه نفس قيمة orderId في الطلب العادي
+          });
+        }
+
+        toast.success("✅ Your order has been received and is now being prepared!");
+
+        if (!reservationId) {
+          clearCart(); // ✅ تفضية السلة إذا مو حجز
+        }
+      } catch (err) {
+        console.error("❌ Error verifying session:", err);
+        toast.error("Payment succeeded, but storing order failed.");
+      }
+    };
 
     if (paymentStatus === "success") {
-      toast.success("✅ Your order has been received and is now being prepared!");
-      if (!reservationId) clearCart(); // ✅ تفضية السلة فقط إذا مش حجز
+      handleSuccess();
     } else if (paymentStatus === "cancel") {
       toast.error("❌ Payment was canceled or failed.");
     }
@@ -31,11 +53,8 @@ const StripeRedirect = () => {
     setTimeout(() => {
       if (slug) {
         if (reservationId) {
-          // ✅ حجز طاولة
           navigate(`/reverse/${slug}`, { replace: true });
-
         } else {
-          // ✅ طلب من السلة
           navigate(`/reverse/${slug}/cart`, { replace: true });
         }
       } else {
