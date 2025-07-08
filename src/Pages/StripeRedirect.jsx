@@ -1,7 +1,7 @@
 import { useEffect, useContext, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import { StoreContext } from "../../context/StoreContext";
+import { StoreContext } from "../context/StoreContext";
 
 const StripeRedirect = () => {
   const navigate = useNavigate();
