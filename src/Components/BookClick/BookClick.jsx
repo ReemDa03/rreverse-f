@@ -43,6 +43,35 @@ const BookClick = ({ onClose, settings, reservationId, slug }) => {
       return;
     }
 
+    
+  if (paymentMethod === "Stripe") {
+    // ✅ نوجه المستخدم لـ Stripe
+    const res = await fetch("/api/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        total: settings.depositAmount,
+        currency: settings.currency || "usd",
+        slug,
+        // إضافات مهمة:
+        reservationId,
+        isBooking: true, // تمييز نوع الطلب
+      }),
+    });
+
+    const data = await res.json();
+
+    if (data.id) {
+      window.location.href = data.url;
+
+    } else {
+      toast.error("Something went wrong with Stripe.");
+    }
+
+    return;
+  }
+
+
     const ref = doc(db, "ReVerse", slug, "bookTable", reservationId);
     await updateDoc(ref, { paymentMethod });
 

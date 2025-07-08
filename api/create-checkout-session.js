@@ -59,6 +59,21 @@ export default async function handler(req, res) {
       apiVersion: "2023-10-16",
     });
 
+    // أول شي منقرأ البيانات من الطلب:
+const isBooking = req.body.isBooking === true;
+const reservationId = req.body.reservationId;
+const slug = req.body.slug;
+
+let successUrl = req.body.success_url;
+let cancelUrl = req.body.cancel_url;
+
+// إذا الدفع كان لحجز طاولة
+if (isBooking && reservationId && slug) {
+  successUrl = `https://rreverse-f.vercel.app/stripe-booking-success?session_id={CHECKOUT_SESSION_ID}&slug=${slug}&reservationId=${reservationId}`;
+  cancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
+}
+
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -72,8 +87,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: "payment",
-      success_url,
-      cancel_url,
+       success_url: successUrl, // ⚠️ متغيرة حسب النوع
+  cancel_url: cancelUrl,
     });
 
 console.log("✅ Stripe Success URL:", success_url);

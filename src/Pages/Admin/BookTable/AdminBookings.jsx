@@ -74,6 +74,51 @@ const AdminBookings = () => {
     return matchStatus && matchDate;
   });
 
+  const handleReject = async (booking) => {
+  try {
+    // 1. إذا الدفع Stripe، نعمل Refund
+    if (booking.paymentMethod === "Stripe" && booking.paymentIntentId) {
+      const res = await fetch("/api/refund", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          paymentIntentId: booking.paymentIntentId,
+          slug,
+          reservationId: booking.id,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Refund failed");
+    }
+
+    // 2. نحدث الحالة في Firestore
+    const ref = doc(db, "ReVerse", slug, "bookTable", booking.id);
+    await updateDoc(ref, {
+      status: "rejected",
+      paymentStatus:
+        booking.paymentMethod === "Stripe" ? "refunded" : "not_paid",
+    });
+
+    // 3. تحديث الواجهة
+    setBookings((prev) =>
+      prev.map((item) =>
+        item.id === booking.id
+          ? {
+              ...item,
+              status: "rejected",
+              paymentStatus:
+                booking.paymentMethod === "Stripe" ? "refunded" : "not_paid",
+            }
+          : item
+      )
+    );
+  } catch (err) {
+    console.error("❌ خطأ في الرفض:", err);
+  }
+};
+
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -138,6 +183,8 @@ const AdminBookings = () => {
                   <th>{t("bookings.table.payment")}</th>
                   <th>{t("bookings.table.status")}</th>
                   <th>{t("bookings.table.actions")}</th>
+                  <th>{t("bookings.table.paymentStatus")}</th>
+
                 </tr>
               </thead>
               <tbody>
@@ -163,11 +210,8 @@ const AdminBookings = () => {
                       >
                         ✅
                       </button>
-                      <button
-                        onClick={() => handleStatusChange(b.id, "rejected")}
-                      >
-                        ❌
-                      </button>
+                      <button onClick={() => handleReject(b)}>❌</button>
+
                       <button
                         onClick={() => {
                           setDeleteId(b.id);
@@ -177,6 +221,8 @@ const AdminBookings = () => {
                         {t("buttons.delete")}
                       </button>
                     </td>
+                    <td>{b.paymentStatus || "-"}</td>
+
                   </motion.tr>
                 ))}
               </tbody>

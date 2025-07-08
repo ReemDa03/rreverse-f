@@ -18,18 +18,25 @@ const StripeRedirect = () => {
     const queryParams = new URLSearchParams(location.search);
     const paymentStatus = queryParams.get("payment");
     const slug = queryParams.get("slug");
+    const reservationId = queryParams.get("reservationId"); // ✅ نضيفها هون
 
     if (paymentStatus === "success") {
       toast.success("✅ Your order has been received and is now being prepared!");
-      clearCart(); // ✅ تفضية السلة مرة وحدة بس
+      if (!reservationId) clearCart(); // ✅ تفضية السلة فقط إذا مش حجز
     } else if (paymentStatus === "cancel") {
       toast.error("❌ Payment was canceled or failed.");
     }
 
-    // ✅ الرجوع لصفحة السلة بعد 2 ثانية
+    // ✅ الرجوع للصفحة المناسبة بعد 2 ثانية
     setTimeout(() => {
       if (slug) {
-        navigate(`/reverse/${slug}/cart`, { replace: true });
+        if (reservationId) {
+          // ✅ حجز طاولة
+          navigate(`/${slug}/book-table`, { replace: true });
+        } else {
+          // ✅ طلب من السلة
+          navigate(`/reverse/${slug}/cart`, { replace: true });
+        }
       } else {
         navigate("/", { replace: true });
       }
@@ -38,7 +45,7 @@ const StripeRedirect = () => {
 
   return (
     <div style={{ textAlign: "center", padding: "2rem" }}>
-      <h2>Redirecting to your cart...</h2>
+      <h2>Redirecting...</h2>
     </div>
   );
 };
