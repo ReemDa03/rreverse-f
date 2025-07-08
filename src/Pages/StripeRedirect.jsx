@@ -32,7 +32,8 @@ const StripeRedirect = () => {
       if (slug) {
         if (reservationId) {
           // ✅ حجز طاولة
-          navigate(`/${slug}/book-table`, { replace: true });
+          navigate(`/reverse/${slug}`, { replace: true });
+
         } else {
           // ✅ طلب من السلة
           navigate(`/reverse/${slug}/cart`, { replace: true });

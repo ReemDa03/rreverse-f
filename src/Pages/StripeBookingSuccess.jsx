@@ -39,7 +39,8 @@ const StripeBookingSuccess = () => {
       }
 
       setTimeout(() => {
-        navigate(`/${slug}`);
+        navigate(`/reverse/${slug}`, { replace: true });
+
 
       }, 4000);
     };
