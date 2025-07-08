@@ -20,6 +20,8 @@ import { AnimatePresence } from "framer-motion";
 
 import StripeRedirect from "./Pages/StripeRedirect";
 
+import StripeRedirectWrapper from "./Pages/StripeRedirectWrapper";
+
 
 const App = () => {
 
@@ -65,6 +67,7 @@ const App = () => {
         
       </Route>
       <Route path="/stripe-redirect" element={<StripeRedirect />} />
+        <Route path="/stripe-redirect" element={<StripeRedirectWrapper />} />
 
     </Routes>
     </AnimatePresence>

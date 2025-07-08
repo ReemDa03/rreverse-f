@@ -8,7 +8,7 @@ const StripeRedirect = () => {
   const location = useLocation();
   const { clearCart } = useContext(StoreContext);
 
-  // ✅ نمنع التكرار
+  // ✅ نمنع التكرار في التنفيذ
   const hasHandled = useRef(false);
 
   useEffect(() => {
@@ -21,12 +21,12 @@ const StripeRedirect = () => {
 
     if (paymentStatus === "success") {
       toast.success("✅ Your order has been received and is now being prepared!");
-      clearCart(); // ✅ تفضية السلة مرة وحدة
+      clearCart(); // ✅ تفضية السلة مرة وحدة بس
     } else if (paymentStatus === "cancel") {
       toast.error("❌ Payment was canceled or failed.");
     }
 
-    // ✅ نرجع للسلة بعد 2 ثانية بس
+    // ✅ الرجوع لصفحة السلة بعد 2 ثانية
     setTimeout(() => {
       if (slug) {
         navigate(`/reverse/${slug}/cart`, { replace: true });
