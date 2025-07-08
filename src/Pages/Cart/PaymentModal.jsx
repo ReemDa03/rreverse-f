@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import "./PaymentModal.css";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -6,9 +7,17 @@ import { useTranslation } from "react-i18next";
 const PaymentModal = ({ onClose, onConfirm, onCardPayment, planType }) => {
   const { t } = useTranslation();
   const [selectedMethod, setSelectedMethod] = useState("");
+
+  // امنعي تمرير الصفحة ورا المودال
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
   
 
-  return (
+  const modalContent = (
     <div className="modal-overlay" onClick={onClose}>
       <motion.div
         key="payment-modal"
@@ -25,18 +34,15 @@ const PaymentModal = ({ onClose, onConfirm, onCardPayment, planType }) => {
 
         <div className="payment-options">
           <button
-            className={`method-btn ${
-              selectedMethod === "cash" ? "active" : ""
-            }`}
+            className={`method-btn ${selectedMethod === "cash" ? "active" : ""}`}
             onClick={() => setSelectedMethod("cash")}
           >
             💵 {t("payment.cash")}
           </button>
+
           {planType === "premium" && (
             <button
-              className={`method-btn ${
-                selectedMethod === "card" ? "active" : ""
-              }`}
+              className={`method-btn ${selectedMethod === "card" ? "active" : ""}`}
               onClick={() => setSelectedMethod("card")}
             >
               💳 {t("payment.card")}
@@ -62,6 +68,8 @@ const PaymentModal = ({ onClose, onConfirm, onCardPayment, planType }) => {
       </motion.div>
     </div>
   );
+
+  return ReactDOM.createPortal(modalContent, document.body);
 };
 
 export default PaymentModal;

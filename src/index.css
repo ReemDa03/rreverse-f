@@ -14,7 +14,10 @@ html, body {
   overflow-x: hidden; /* يمنع الفراغ من اليمين */
   
   scroll-behavior: smooth;
+}
 
 
-  
+.navbar, .footer {
+  z-index: 1 !important;
+  position: relative;
 }
