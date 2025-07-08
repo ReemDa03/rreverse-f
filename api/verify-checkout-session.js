@@ -51,6 +51,11 @@ export default async function handler(req, res) {
 
     const { name, tableSize, date, time } = metadata;
 
+    // ✅ التحقق من القيم المطلوبة
+    if (!name || !tableSize || !date || !time) {
+      return res.status(400).json({ error: "Missing booking data in metadata." });
+    }
+
     // ✅ الحجز النهائي (set with merge)
     const ref = db
       .collection("ReVerse")

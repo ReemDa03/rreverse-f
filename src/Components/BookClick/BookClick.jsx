@@ -50,19 +50,23 @@ const BookClick = ({ onClose, settings, reservationId, slug }) => {
   }
 
   if (paymentMethod === "Stripe") {
-    const reservationId = Math.random().toString(36).substring(2, 10); // ID مؤقت
+  const reservationId = Math.random().toString(36).substring(2, 10); // ID مؤقت
 
-    const res = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        total: settings.depositAmount,
-        currency: settings.currency || "usd",
-        slug,
-        reservationId,
-        isBooking: true,
-      }),
-    });
+  const res = await fetch("/api/create-checkout-session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      total: settings.depositAmount,
+      currency: settings.currency || "usd",
+      slug,
+      reservationId,
+      isBooking: true,
+      name: tempReservation.name,
+      tableSize: tempReservation.tableSize,
+      date: tempReservation.date,
+      time: tempReservation.time,
+    }),
+  });
 
     const data = await res.json();
 
