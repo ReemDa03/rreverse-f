@@ -28,10 +28,10 @@ const StripeBookingSuccess = () => {
         const data = await res.json();
 
         if (res.ok) {
-          toast.success("✅ تم تأكيد الحجز بنجاح!");
-          toast.success("✅ تم استلام الحجز بنجاح! سيتم استرداد المبلغ خلال 24 ساعة في حال تم رفض الحجز.");
-
-        } else {
+  toast.success("✅ تم تأكيد الحجز بنجاح!");
+  toast.info("💳 سيتم إعادة المبلغ خلال 24 ساعة في حال تم رفض الحجز.");
+}
+ else {
           toast.error(data.error || "❌ حدث خطأ أثناء تأكيد الحجز.");
         }
       } catch (err) {
@@ -39,7 +39,8 @@ const StripeBookingSuccess = () => {
       }
 
       setTimeout(() => {
-        navigate(`/${slug}/book-table`);
+        navigate(`/${slug}`);
+
       }, 4000);
     };
 

@@ -1,6 +1,7 @@
 import Stripe from "stripe";
-import { db } from "../firebase"; // عدلي المسار حسب مشروعك
-import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebaseAdmin"; // ✅ صار يستدعي admin SDK
+import { doc, updateDoc } from "firebase-admin/firestore"; // من admin
+
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
