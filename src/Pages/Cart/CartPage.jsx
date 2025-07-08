@@ -20,6 +20,9 @@ import DeliveryForm from "./DeliveryForm";
 import PaymentModal from "./PaymentModal";
 import { useTranslation } from "react-i18next"; // فوق في الكومبوننت
 import axios from "axios"; // إذا ما كنتِ ضايفته
+import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
+
 
 const CartPage = () => {
   const { t } = useTranslation();
@@ -44,6 +47,7 @@ const CartPage = () => {
   const planType = restaurantData?.plan || "basic";
 
 
+  
 
  const handleCardPayment = async () => {
   try {
@@ -148,6 +152,23 @@ const CartPage = () => {
   };
 
   if (loading) return <p>Loading...</p>;
+
+  const location = useLocation();
+
+  useEffect(() => {
+  const queryParams = new URLSearchParams(location.search);
+  const paymentStatus = queryParams.get("payment");
+
+  if (paymentStatus === "success") {
+    clearCart();
+    toast.success("✅ Your order has been received and is now being prepared!");
+  }
+
+  if (paymentStatus === "cancel") {
+    toast.error("❌ Payment was canceled or failed.");
+  }
+}, [location.search]);
+
 
   return (
     <motion.div
