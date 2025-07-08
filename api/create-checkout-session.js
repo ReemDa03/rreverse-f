@@ -29,12 +29,22 @@ export default async function handler(req, res) {
     tableSize,
     date,
     time,
+    
+  // ✅ هدول ضيفهم 👇
+  phone,
+  cartItems,
   } = req.body;
 
   // ✅ تحقق من البيانات الأساسية
   if (!slug) {
     return res.status(400).json({ error: "Missing required fields" });
   }
+
+  
+// ✅ تحقق من بيانات الطلب العادي إذا مش حجز
+if (!isBooking && (!phone || !cartItems)) {
+  return res.status(400).json({ error: "Missing order details" });
+}
 
   try {
     // ✅ جلب بيانات المطعم من Firestore

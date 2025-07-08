@@ -63,37 +63,38 @@ const CartPage = () => {
   }, [location.search]);
 
   const handleCardPayment = async () => {
-  try {
-    if (
-      !restaurantData?.stripePublicKey ||
-      !restaurantData?.success_url ||
-      !restaurantData?.cancel_url
-    ) {
-      toast.error("Stripe data missing. Please contact the restaurant.");
-      return;
+    try {
+      if (
+        !restaurantData?.stripePublicKey ||
+        !restaurantData?.success_url ||
+        !restaurantData?.cancel_url
+      ) {
+        toast.error("Stripe data missing. Please contact the restaurant.");
+        return;
+      }
+
+      const orderId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+      const res = await axios.post("/api/create-checkout-session", {
+        total: total,
+        currency: restaurantData.currency || "usd",
+        slug: slug,
+        isBooking: false, // ✅ هذا الفرق بين الحجز والطلب
+        reservationId: orderId, // نستخدمه كـ orderId
+        name: customerInfo.name,
+        phone: customerInfo.phone,
+
+        cartItems: cartItems, // ✅ أرسل السلة
+      });
+
+      const sessionId = res.data.id;
+      const stripe = window.Stripe(restaurantData.stripePublicKey);
+      await stripe.redirectToCheckout({ sessionId });
+    } catch (err) {
+      console.error("Stripe Error:", err);
+      toast.error(t("payment.errorCard"));
     }
-
-    const orderId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-
-    const res = await axios.post("/api/create-checkout-session", {
-      total: total,
-      currency: restaurantData.currency || "usd",
-      slug: slug,
-      isBooking: false, // ✅ هذا الفرق بين الحجز والطلب
-      reservationId: orderId, // نستخدمه كـ orderId
-      name: userName,
-      phone: userPhone,
-      cartItems: cartItems, // ✅ أرسل السلة
-    });
-
-    const sessionId = res.data.id;
-    const stripe = window.Stripe(restaurantData.stripePublicKey);
-    await stripe.redirectToCheckout({ sessionId });
-  } catch (err) {
-    console.error("Stripe Error:", err);
-    toast.error(t("payment.errorCard"));
-  }
-};
+  };
 
   // ✅ تحميل بيانات المنتجات
   useEffect(() => {
