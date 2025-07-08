@@ -73,7 +73,8 @@ export default async function handler(req, res) {
       ],
       mode: "payment",
       success_url: `${success_url}?payment=success`,
-  cancel_url: `${cancel_url}?payment=cancel`,
+cancel_url: `${cancel_url}?payment=cancel`,
+
     });
 
   
