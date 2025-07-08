@@ -43,8 +43,28 @@ const CartPage = () => {
   });
   const [restaurantData, setRestaurantData] = useState(null);
   const { slug } = useParams();
+  const location = useLocation();
 
   const planType = restaurantData?.plan || "basic";
+
+
+  
+  
+  
+
+  useEffect(() => {
+  const queryParams = new URLSearchParams(location.search);
+  const paymentStatus = queryParams.get("payment");
+
+  if (paymentStatus === "success") {
+    clearCart();
+    toast.success("✅ Your order has been received and is now being prepared!");
+  }
+
+  if (paymentStatus === "cancel") {
+    toast.error("❌ Payment was canceled or failed.");
+  }
+}, [location.search]);
 
 
   
@@ -152,23 +172,6 @@ const CartPage = () => {
   };
 
   if (loading) return <p>Loading...</p>;
-
-  const location = useLocation();
-
-  useEffect(() => {
-  const queryParams = new URLSearchParams(location.search);
-  const paymentStatus = queryParams.get("payment");
-
-  if (paymentStatus === "success") {
-    clearCart();
-    toast.success("✅ Your order has been received and is now being prepared!");
-  }
-
-  if (paymentStatus === "cancel") {
-    toast.error("❌ Payment was canceled or failed.");
-  }
-}, [location.search]);
-
 
   return (
     <motion.div
