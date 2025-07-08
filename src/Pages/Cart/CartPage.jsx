@@ -20,7 +20,7 @@ import DeliveryForm from "./DeliveryForm";
 import PaymentModal from "./PaymentModal";
 import { useTranslation } from "react-i18next"; // فوق في الكومبوننت
 import axios from "axios"; // إذا ما كنتِ ضايفته
-import { toast } from "react-toastify";
+
 import { useLocation } from "react-router-dom";
 
 
