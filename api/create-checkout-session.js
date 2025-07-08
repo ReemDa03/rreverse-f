@@ -70,7 +70,7 @@ export default async function handler(req, res) {
     let finalCancelUrl = cancel_url || fallbackCancelUrl;
 
     if (isBooking && reservationId) {
-      finalSuccessUrl = `https://rreverse-f.vercel.app/stripe-booking-success?slug=${slug}&session_id={CHECKOUT_SESSION_ID}`;
+      finalSuccessUrl = `https://rreverse-f.vercel.app/stripe-booking-success?slug=${slug}&reservationId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`;
       finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
     }
 
