@@ -15,7 +15,7 @@ const db = getFirestore();
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
-  const { session_id, slug, reservationId } = req.body;
+  const { sessionId, slug, reservationId } = req.body;
 
   try {
     // ✅ جلب بيانات المطعم
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
     });
 
     // ✅ استرجاع جلسة الدفع
-    const session = await stripe.checkout.sessions.retrieve(session_id);
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (!session || session.payment_status !== "paid") {
       return res.status(400).json({ error: "Payment not completed" });
