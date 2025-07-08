@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import admin from "firebase-admin";
+import { getFirestore, Timestamp } from "firebase-admin/firestore";
 
 // ✅ Firebase Admin Init
 if (!admin.apps.length) {
@@ -9,7 +10,7 @@ if (!admin.apps.length) {
   });
 }
 
-const db = admin.firestore();
+const db = getFirestore();
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
   const { session_id, slug, reservationId } = req.body;
 
   try {
-    // ✅ Get restaurant data from Firestore
+    // ✅ جلب بيانات المطعم
     const docRef = db.collection("ReVerse").doc(slug);
     const docSnap = await docRef.get();
 
@@ -25,8 +26,7 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "Restaurant not found" });
     }
 
-    const restaurantData = docSnap.data();
-    const stripeSecretKey = restaurantData.stripeSecretKey;
+    const { stripeSecretKey } = docSnap.data();
 
     if (!stripeSecretKey) {
       return res.status(400).json({ error: "Stripe secret key missing" });
@@ -36,30 +36,46 @@ export default async function handler(req, res) {
       apiVersion: "2023-10-16",
     });
 
-    // ✅ Retrieve session from Stripe
+    // ✅ استرجاع جلسة الدفع
     const session = await stripe.checkout.sessions.retrieve(session_id);
 
     if (!session || session.payment_status !== "paid") {
-      return res.status(400).json({ error: "Payment not successful" });
+      return res.status(400).json({ error: "Payment not completed" });
     }
 
-    const paymentIntentId = session.payment_intent;
+    const metadata = session.metadata;
 
-    // ✅ Update reservation in Firestore
-    await db
+    if (!metadata) {
+      return res.status(400).json({ error: "Missing metadata" });
+    }
+
+    const { name, tableSize, date, time } = metadata;
+
+    // ✅ الحجز النهائي (set with merge)
+    const ref = db
       .collection("ReVerse")
       .doc(slug)
       .collection("bookTable")
-      .doc(reservationId)
-      .update({
+      .doc(reservationId);
+
+    await ref.set(
+      {
+        name,
+        tableSize,
+        date,
+        time,
         paymentStatus: "paid",
-        paymentIntentId,
         paymentMethod: "Stripe",
-      });
+        createdAt: Timestamp.now(),
+        stripeSessionId: session_id,
+        paymentIntentId: session.payment_intent,
+      },
+      { merge: true }
+    );
 
     return res.status(200).json({ message: "Booking confirmed" });
   } catch (error) {
-    console.error("Error verifying Stripe session:", error);
+    console.error("Error verifying session:", error);
     return res.status(500).json({ error: "Server error" });
   }
 }
