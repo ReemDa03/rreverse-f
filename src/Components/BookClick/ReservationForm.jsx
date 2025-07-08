@@ -182,6 +182,12 @@ function ReservationForm({ slug }) {
           settings={settings}
           reservationId={reservationId}
           slug={slug}
+          onBookingSuccess={() => {
+    setName("");
+    setDate("");
+    setTime("08:00 PM");
+    setTableSize("2");
+  }}
         />
       )}
 

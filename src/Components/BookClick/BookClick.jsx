@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, collection,  addDoc, Timestamp  } from "firebase/firestore";
 import { db } from "../../../firebase";
 import "./BookClick.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next"; // ✅
 
-const BookClick = ({ onClose, settings, reservationId, slug }) => {
+const BookClick = ({ onClose, settings, reservationId, slug, onBookingSuccess }) => {
+
   const [paymentMethod, setPaymentMethod] = useState("");
   const [triedToSubmit, setTriedToSubmit] = useState(false);
   const [show, setShow] = useState(false); // ✅ بديل motion
   const { t } = useTranslation(); // ✅
+  
 
   useEffect(() => {
     const timeout = setTimeout(() => setShow(true), 10); // ✅ simulate animation delay
@@ -91,9 +93,18 @@ const BookClick = ({ onClose, settings, reservationId, slug }) => {
       status: "pending",
     });
 
-    toast.success(t("modal.success"));
-    localStorage.removeItem("pendingReservation");
-    onClose();
+    toast.success("تم استلام طلب الحجز. يُرجى التواصل معنا للدفع وتأكيد الحجز.");
+localStorage.removeItem("pendingReservation");
+
+
+// ✨ أفرغ الفورم:
+onBookingSuccess();
+
+
+setTimeout(() => {
+  onClose();
+}, 3500); // 1.5 ثانية تأخير
+
   } catch (err) {
     console.error("Error saving cash booking:", err);
     toast.error("فشل في إنشاء الحجز.");
