@@ -76,6 +76,8 @@ export default async function handler(req, res) {
       cancel_url,
     });
 
+console.log("✅ Stripe Success URL:", success_url);
+console.log("❌ Stripe Cancel URL:", cancel_url);
   
 
     res.status(200).json({ id: session.id });
