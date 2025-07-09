@@ -65,35 +65,36 @@ const CartPage = () => {
   const handleCardPayment = async () => {
     try {
       if (!restaurantData?.stripePublicKey) {
-  toast.error("Stripe data missing. Please contact the restaurant.");
-  return;
-}
-
+        toast.error("Stripe data missing. Please contact the restaurant.");
+        return;
+      }
 
       const orderId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
       const res = await axios.post("/api/create-checkout-session", {
-  total,
-  currency: restaurantData.currency || "usd",
-  slug,
-  isBooking: false,
-  reservationId: orderId,
-  name: customerInfo.name,
-  phone: customerInfo.phone,
-  cartItems: Object.values(cartItems).map((item) => ({
-    id: item.id,
-    name: item.name,
-    price: item.price,
-    quantity: item.quantity,
-    size: item.size,
-    notes: item.notes || "",
-  })),
-  dineOption, // ✅ ضروري
-  customerInfo, // ✅ ضروري (فارغ إذا dineOption === "inside")
-  tableNumber, // ✅ ضروري (فارغ إذا dineOption === "outside")
-  notes, // ✅ إذا بدكها توصل
-  
-});
+        total,
+        currency: restaurantData.currency || "usd",
+        slug,
+        isBooking: false,
+        reservationId: orderId,
+        name: customerInfo.name,
+        phone: customerInfo.phone,
+        cartItems: Object.values(cartItems).map((item) => ({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          size: item.size,
+          notes: item.notes || "",
+        })),
+        dineOption, // ✅ ضروري
+        customerInfo:
+          dineOption === "inside"
+            ? { name, phone: "", country: "", address: "" }
+            : customerInfo,
+        tableNumber, // ✅ ضروري (فارغ إذا dineOption === "outside")
+        notes, // ✅ إذا بدكها توصل
+      });
 
       const sessionId = res.data.id;
       const stripe = window.Stripe(restaurantData.stripePublicKey);
