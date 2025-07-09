@@ -89,8 +89,9 @@ const CartPage = () => {
         slug,
         isBooking: false,
         reservationId: orderId,
-        name: customerInfo.name,
-        phone: customerInfo.phone,
+        name: customer.name,
+phone: customer.phone,
+
         cartItems: Object.values(cartItems).map((item) => ({
           id: item.id,
           name: item.name,
