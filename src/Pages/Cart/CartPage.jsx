@@ -74,10 +74,13 @@ const CartPage = () => {
 
       
     // ✅ نعبي بيانات الاسم والرقم إذا فاضية وكان داخل المطعم
-    if (dineOption === "inside") {
-      if (!customerInfo.name) customerInfo.name = `Guest-${orderId.slice(-4)}`;
-      if (!customerInfo.phone) customerInfo.phone = "0000000000";
-    }
+    let tempCustomerInfo = { ...customerInfo };
+
+if (dineOption === "inside") {
+  if (!tempCustomerInfo.name) tempCustomerInfo.name = `Guest-${orderId.slice(-4)}`;
+  if (!tempCustomerInfo.phone) tempCustomerInfo.phone = "0000000000";
+}
+
 
 
       const res = await axios.post("/api/create-checkout-session", {
@@ -97,7 +100,7 @@ const CartPage = () => {
           notes: item.notes || "",
         })),
         dineOption, // ✅ ضروري
-         customerInfo,
+         customerInfo: tempCustomerInfo,
         tableNumber, // ✅ ضروري (فارغ إذا dineOption === "outside")
         notes, // ✅ إذا بدكها توصل
       });
