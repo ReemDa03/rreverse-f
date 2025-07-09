@@ -95,27 +95,30 @@ export default async function handler(req, res) {
       : (total || 1) * 100;
 
     // ✅ تجهيز metadata آمنة ومختصرة
-    const metadata = isBooking
-      ? {
-          slug,
-          reservationId,
-          name,
-          tableSize,
-          date,
-          time,
-        }
-      : {
-          slug,
-          orderId: reservationId,
-          name,
-          phone,
-          total: total.toString(),
-          itemsCount: cartItems.length.toString(),
-          cartSummary: cartItems
-            .map((item) => `${item.name} (${item.quantity})`)
-            .join(", ")
-            .slice(0, 400), // ✅ نضمن ما يتجاوز 500 حرف
-        };
+    const cartArray = Array.isArray(cartItems) ? cartItems : Object.values(cartItems || {});
+
+const metadata = isBooking
+  ? {
+      slug,
+      reservationId,
+      name,
+      tableSize,
+      date,
+      time,
+    }
+  : {
+      slug,
+      orderId: reservationId,
+      name,
+      phone,
+      total: total.toString(),
+      itemsCount: cartArray.length.toString(),
+      cartSummary: cartArray
+        .map((item) => `${item.name} (${item.quantity})`)
+        .join(", ")
+        .slice(0, 400),
+    };
+
 
     // ✅ إنشاء الجلسة مع Stripe
     const session = await stripe.checkout.sessions.create({

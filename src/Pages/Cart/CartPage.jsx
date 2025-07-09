@@ -84,7 +84,7 @@ const CartPage = () => {
         name: customerInfo.name,
         phone: customerInfo.phone,
 
-        cartItems: cartItems, // ✅ أرسل السلة
+  cartItems: Object.values(cartItems), // ✅ الحل هنا
       });
 
       const sessionId = res.data.id;
