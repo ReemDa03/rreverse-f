@@ -68,7 +68,7 @@ export default async function handler(req, res) {
     });
 
     // ✅ روابط النجاح والإلغاء (فيها PLACEHOLDER بدل session.id)
-    const successUrlTemplate = `https://rreverse-f.vercel.app/stripe-redirect?payment=success&slug=${encodeURIComponent(slug)}&reservationId=${encodeURIComponent(reservationId)}`;
+    const successUrlTemplate = `https://rreverse-f.vercel.app/stripe-redirect?payment=success&slug=${encodeURIComponent(slug)}&reservationId=${encodeURIComponent(reservationId)}&session_id={CHECKOUT_SESSION_ID}`;
 
     const cancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
 
