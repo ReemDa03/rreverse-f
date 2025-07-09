@@ -9,7 +9,6 @@ const StripeRedirect = () => {
   const location = useLocation();
   const { clearCart } = useContext(StoreContext);
 
-  // ✅ نمنع التكرار في التنفيذ
   const hasHandled = useRef(false);
 
   useEffect(() => {
@@ -20,36 +19,56 @@ const StripeRedirect = () => {
     const paymentStatus = queryParams.get("payment");
     const slug = queryParams.get("slug");
     const reservationId = queryParams.get("reservationId");
-    const sessionId = queryParams.get("session_id"); // ✅ الجلسة من Stripe
+    const sessionId = queryParams.get("session_id");
 
     const handleSuccess = async () => {
-  try {
-    // ✅ نطلب sessionId الحقيقي من السيرفر باستخدام orderId
-    const sessionRes = await axios.post("/api/stripe-session-info", {
-      slug,
-      orderId: reservationId,
-    });
+      try {
+        if (!slug || !sessionId) {
+          toast.error("❌ رابط غير صالح");
+          return;
+        }
 
-    const { sessionId } = sessionRes.data;
+        if (reservationId) {
+          // ✅ حالة الحجز
+          const res = await axios.post("/api/verify-checkout-session", {
+            sessionId,
+            slug,
+            reservationId,
+          });
 
-    // ✅ نرسل sessionId للـ stripe-order-success
-    if (sessionId) {
-      await axios.post("/api/stripe-order-success", {
-        sessionId,
-        slug,
-        orderId: reservationId,
-      });
+          if (res.status === 200) {
+            toast.success("✅ تم تأكيد الحجز بنجاح!");
+            toast.info("💳 سيتم إعادة المبلغ خلال 24 ساعة إذا تم رفض الحجز.");
+          } else {
+            toast.error("❌ فشل تأكيد الحجز.");
+          }
+        } else {
+          // ✅ حالة الطلب
+          const sessionRes = await axios.post("/api/stripe-session-info", {
+            slug,
+            orderId: reservationId,
+          });
 
-      toast.success("✅ تم تأكيد الطلب بنجاح!");
-      clearCart();
-    } else {
-      toast.error("❌ فشل الحصول على جلسة الدفع.");
-    }
-  } catch (err) {
-    console.error("❌ Error confirming order:", err);
-    toast.error("❌ فشل تأكيد الدفع.");
-  }
-};
+          const { sessionId: realSessionId } = sessionRes.data;
+
+          if (realSessionId) {
+            await axios.post("/api/stripe-order-success", {
+              sessionId: realSessionId,
+              slug,
+              orderId: reservationId,
+            });
+
+            toast.success("✅ تم تأكيد الطلب بنجاح!");
+            clearCart();
+          } else {
+            toast.error("❌ فشل الحصول على جلسة الدفع.");
+          }
+        }
+      } catch (err) {
+        console.error("❌ Error confirming:", err);
+        toast.error("❌ فشل تأكيد العملية.");
+      }
+    };
 
     if (paymentStatus === "success") {
       handleSuccess();
@@ -57,7 +76,6 @@ const StripeRedirect = () => {
       toast.error("❌ Payment was canceled or failed.");
     }
 
-    // ✅ الرجوع للصفحة المناسبة بعد 2 ثانية
     setTimeout(() => {
       if (slug) {
         if (reservationId) {
@@ -68,12 +86,12 @@ const StripeRedirect = () => {
       } else {
         navigate("/", { replace: true });
       }
-    }, 2000);
+    }, 3000);
   }, [location.search, navigate, clearCart]);
 
   return (
     <div style={{ textAlign: "center", padding: "2rem" }}>
-      <h2>Redirecting...</h2>
+      <h2>جارٍ التأكيد...</h2>
     </div>
   );
 };
