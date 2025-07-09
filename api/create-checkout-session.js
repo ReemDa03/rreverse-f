@@ -125,7 +125,9 @@ if (!isBooking && (!phone || !cartItems)) {
       orderId: reservationId, // نفسه orderId
       name,
       phone,
-      cart: JSON.stringify(cartItems),
+      itemsCount: cartItems.length,
+cartSummary: cartItems.map(item => `${item.name} (${item.quantity})`).join(", ").slice(0, 100), // 👈 للاحتياط
+
       total,
     },
 
