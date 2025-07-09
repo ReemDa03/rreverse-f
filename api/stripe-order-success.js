@@ -46,21 +46,27 @@ export default async function handler(req, res) {
 
     // ✅ تخزين الطلب في orders
     await db
-      .collection("ReVerse")
-      .doc(slug)
-      .collection("orders")
-      .doc(orderId)
-      .set({
-        name: tempData.name,
-        phone: tempData.phone,
-        cart: tempData.cartItems,
-        total: tempData.total,
-        paymentStatus: "paid",
-        paymentMethod: "Stripe",
-        createdAt: admin.firestore.Timestamp.now(),
-        stripeSessionId: sessionId,
-        paymentIntentId: session.payment_intent,
-      });
+  .collection("ReVerse")
+  .doc(slug)
+  .collection("orders")
+  .doc(orderId)
+  .set({
+    items: tempData.cartItems || [],
+    dineOption: tempData.dineOption || null,
+    customerInfo: tempData.customerInfo || {},
+    tableNumber: tempData.tableNumber || null,
+    notes: tempData.notes || "",
+    name: tempData.name,
+    phone: tempData.phone,
+    total: tempData.total,
+    paymentStatus: "paid",
+    paymentMethod: "Stripe",
+    createdAt: admin.firestore.Timestamp.now(),
+    isSeen: false,
+    stripeSessionId: sessionId,
+    paymentIntentId: session.payment_intent,
+  });
+
 
     // ✅ حذف الطلب المؤقت
     await tempOrderRef.delete();

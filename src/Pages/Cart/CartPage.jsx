@@ -76,16 +76,26 @@ const CartPage = () => {
       const orderId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
       const res = await axios.post("/api/create-checkout-session", {
-        total: total,
-        currency: restaurantData.currency || "usd",
-        slug: slug,
-        isBooking: false, // ✅ هذا الفرق بين الحجز والطلب
-        reservationId: orderId, // نستخدمه كـ orderId
-        name: customerInfo.name,
-        phone: customerInfo.phone,
-
-  cartItems: Object.values(cartItems), // ✅ الحل هنا
-      });
+  total,
+  currency: restaurantData.currency || "usd",
+  slug,
+  isBooking: false,
+  reservationId: orderId,
+  name: customerInfo.name,
+  phone: customerInfo.phone,
+  cartItems: Object.values(cartItems).map((item) => ({
+    id: item.id,
+    name: item.name,
+    price: item.price,
+    quantity: item.quantity,
+    size: item.size,
+    notes: item.notes || "",
+  })),
+  dineOption,
+  customerInfo,
+  notes,
+  tableNumber,
+});
 
       const sessionId = res.data.id;
       const stripe = window.Stripe(restaurantData.stripePublicKey);

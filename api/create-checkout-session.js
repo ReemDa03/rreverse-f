@@ -75,19 +75,24 @@ export default async function handler(req, res) {
 
     // ✅ احفظ بيانات الطلب الحقيقية مؤقتًا في Firestore (مش داخل Stripe)
     if (!isBooking) {
-      await db
-        .collection("ReVerse")
-        .doc(slug)
-        .collection("TempOrders")
-        .doc(reservationId)
-        .set({
-          createdAt: admin.firestore.FieldValue.serverTimestamp(),
-          cartItems,
-          phone,
-          name,
-          total,
-        });
-    }
+  await db
+    .collection("ReVerse")
+    .doc(slug)
+    .collection("TempOrders")
+    .doc(reservationId)
+    .set({
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      cartItems,
+      phone,
+      name,
+      total,
+      dineOption,
+      customerInfo,
+      notes,
+      tableNumber,
+    });
+}
+
 
     // ✅ تحديد السعر بالدولار أو حسب إعدادات المطعم
     const unitAmount = isBooking
