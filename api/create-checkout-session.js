@@ -50,6 +50,11 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "Restaurant not found" });
     }
 
+    
+// ✅ هذا هو السطر اللي نسيتيه
+const data = docSnap.data();
+
+
     const {
   stripeSecretKey,
   currency: docCurrency,
