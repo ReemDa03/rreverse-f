@@ -64,14 +64,11 @@ const CartPage = () => {
 
   const handleCardPayment = async () => {
     try {
-      if (
-        !restaurantData?.stripePublicKey ||
-        !restaurantData?.success_url ||
-        !restaurantData?.cancel_url
-      ) {
-        toast.error("Stripe data missing. Please contact the restaurant.");
-        return;
-      }
+      if (!restaurantData?.stripePublicKey) {
+  toast.error("Stripe data missing. Please contact the restaurant.");
+  return;
+}
+
 
       const orderId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
