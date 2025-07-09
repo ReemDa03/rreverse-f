@@ -22,7 +22,7 @@ function StripeOrderSuccess() {
 
         if (res.data?.message) {
           toast.success("✅ تم تأكيد الطلب بنجاح!");
-          clearCart(); // ✅ هون تمام
+          clearCart(); // ✅ تمام
         }
       } catch (err) {
         console.error(err);
