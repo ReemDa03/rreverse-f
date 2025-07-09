@@ -84,7 +84,7 @@ if (!isBooking && (!phone || !cartItems)) {
   finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
 } else {
   finalSuccessUrl = `https://rreverse-f.vercel.app/stripe-order-success?slug=${slug}&orderId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`;
-  finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
+    finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
 }
 
     // ✅ تحديد السعر: هل هو مبلغ الحجز أم مبلغ طلب عادي؟

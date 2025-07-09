@@ -2,12 +2,16 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useContext } from "react";
+import { StoreContext } from "../context/StoreContext"; // إذا المسار مختلف عدليه
+
 
 function StripeOrderSuccess() {
   const [params] = useSearchParams();
   const sessionId = params.get("session_id");
   const slug = params.get("slug");
   const orderId = params.get("orderId");
+  const { clearCart } = useContext(StoreContext);
 
   useEffect(() => {
     const confirmOrder = async () => {
@@ -20,6 +24,7 @@ function StripeOrderSuccess() {
 
         if (res.data?.message) {
           toast.success("✅ تم تأكيد الطلب بنجاح!");
+          clearCart(); // ✅ ضيفيه هون
         }
       } catch (err) {
         console.error(err);
@@ -30,6 +35,7 @@ function StripeOrderSuccess() {
     confirmOrder();
   }, [sessionId]);
 
+  
   return <h2>جارٍ تأكيد الطلب...</h2>;
 }
 
