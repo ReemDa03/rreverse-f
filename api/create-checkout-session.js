@@ -71,9 +71,9 @@ export default async function handler(req, res) {
     });
 
     // ✅ روابط النجاح والإلغاء
-    let finalSuccessUrl = isBooking
-      ? `https://rreverse-f.vercel.app/stripe-booking-success?slug=${slug}&reservationId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`
-      : `https://rreverse-f.vercel.app/stripe-order-success?slug=${slug}&orderId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`;
+    const finalSuccessUrl = isBooking
+  ? `https://rreverse-f.vercel.app/stripe-booking-success?slug=${slug}&reservationId=${reservationId}&session_id=${session.id}`
+  : `https://rreverse-f.vercel.app/stripe-order-success?slug=${slug}&orderId=${reservationId}&session_id=${session.id}`;
 
     let finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
 
