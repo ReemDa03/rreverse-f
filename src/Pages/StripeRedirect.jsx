@@ -23,25 +23,33 @@ const StripeRedirect = () => {
     const sessionId = queryParams.get("session_id"); // ✅ الجلسة من Stripe
 
     const handleSuccess = async () => {
-      try {
-        if (sessionId && slug && reservationId) {
-          await axios.post("/api/stripe-session-info", {
-            sessionId,
-            slug,
-            orderId: reservationId, // ✅ لأنه نفس قيمة orderId في الطلب العادي
-          });
-        }
+  try {
+    // ✅ نطلب sessionId الحقيقي من السيرفر باستخدام orderId
+    const sessionRes = await axios.post("/api/stripe-session-info", {
+      slug,
+      orderId: reservationId,
+    });
 
-        toast.success("✅ Your order has been received and is now being prepared!");
+    const { sessionId } = sessionRes.data;
 
-        if (!reservationId) {
-          clearCart(); // ✅ تفضية السلة إذا مو حجز
-        }
-      } catch (err) {
-        console.error("❌ Error verifying session:", err);
-        toast.error("Payment succeeded, but storing order failed.");
-      }
-    };
+    // ✅ نرسل sessionId للـ stripe-order-success
+    if (sessionId) {
+      await axios.post("/api/stripe-order-success", {
+        sessionId,
+        slug,
+        orderId: reservationId,
+      });
+
+      toast.success("✅ تم تأكيد الطلب بنجاح!");
+      clearCart();
+    } else {
+      toast.error("❌ فشل الحصول على جلسة الدفع.");
+    }
+  } catch (err) {
+    console.error("❌ Error confirming order:", err);
+    toast.error("❌ فشل تأكيد الدفع.");
+  }
+};
 
     if (paymentStatus === "success") {
       handleSuccess();
