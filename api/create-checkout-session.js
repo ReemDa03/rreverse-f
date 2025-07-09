@@ -50,18 +50,17 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "Restaurant not found" });
     }
 
-    const data = docSnap.data();
     const {
-      stripeSecretKey,
-      success_url: fallbackSuccessUrl,
-      cancel_url: fallbackCancelUrl,
-      currency: docCurrency,
-      depositAmount,
-    } = data;
+  stripeSecretKey,
+  currency: docCurrency,
+  depositAmount,
+} = data;
 
-    if (!stripeSecretKey || !fallbackSuccessUrl || !fallbackCancelUrl) {
-      return res.status(400).json({ error: "Stripe data missing" });
-    }
+
+    if (!stripeSecretKey) {
+  return res.status(400).json({ error: "Stripe data missing" });
+}
+
 
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: "2023-10-16",
