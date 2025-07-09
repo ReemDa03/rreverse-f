@@ -50,22 +50,18 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "Restaurant not found" });
     }
 
-    
-// ✅ هذا هو السطر اللي نسيتيه
-const data = docSnap.data();
-
+    // ✅ هذا هو السطر اللي نسيتيه
+    const data = docSnap.data();
 
     const {
-  stripeSecretKey,
-  currency: docCurrency,
-  depositAmount,
-} = data;
-
+      stripeSecretKey,
+      currency: docCurrency,
+      depositAmount,
+    } = data;
 
     if (!stripeSecretKey) {
-  return res.status(400).json({ error: "Stripe data missing" });
-}
-
+      return res.status(400).json({ error: "Stripe data missing" });
+    }
 
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: "2023-10-16",
@@ -73,12 +69,8 @@ const data = docSnap.data();
 
     // ✅ روابط النجاح والإلغاء (فيها PLACEHOLDER بدل session.id)
     const successUrlTemplate = isBooking
-  ? `https://rreverse-f.vercel.app/stripe-booking-success?slug=${encodeURIComponent(slug)}&reservationId=${encodeURIComponent(reservationId)}&session_id={CHECKOUT_SESSION_ID}`
-  : `https://rreverse-f.vercel.app/stripe-order-success?slug=${encodeURIComponent(slug)}&orderId=${encodeURIComponent(reservationId)}&session_id={CHECKOUT_SESSION_ID}`;
-
-  console.log("➡️ Success URL Template:", successUrlTemplate);
-  console.log("✅ Stripe Session URL:", session.url);
-
+      ? `https://rreverse-f.vercel.app/stripe-booking-success?slug=${encodeURIComponent(slug)}&reservationId=${encodeURIComponent(reservationId)}&session_id={CHECKOUT_SESSION_ID}`
+      : `https://rreverse-f.vercel.app/stripe-order-success?slug=${encodeURIComponent(slug)}&orderId=${encodeURIComponent(reservationId)}&session_id={CHECKOUT_SESSION_ID}`;
 
     const cancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
 
@@ -153,7 +145,9 @@ const data = docSnap.data();
       metadata,
     });
 
+    // ✅ هون مكان الـ console الصح
     console.log("✅ Stripe Session Created:", session.id);
+    console.log("✅ Stripe Session URL:", session.url);
     console.log("➡️ Success URL Template:", successUrlTemplate);
 
     res.status(200).json({ id: session.id, url: session.url });
