@@ -21,54 +21,57 @@ const StripeRedirect = () => {
     const reservationId = queryParams.get("reservationId");
     const sessionId = queryParams.get("session_id");
 
-    const handleSuccess = async () => {
-      try {
-        if (!slug || !sessionId) {
-          toast.error("❌ رابط غير صالح");
-          return;
-        }
+  const handleSuccess = async () => {
+  try {
+    if (!sessionId || !slug || !reservationId) {
+      toast.error("❌ بيانات غير مكتملة لتأكيد الدفع.");
+      return;
+    }
 
-        if (reservationId) {
-          // ✅ حالة الحجز
-          const res = await axios.post("/api/verify-checkout-session", {
-            sessionId,
-            slug,
-            reservationId,
-          });
+    // ✅ استرجاع الجلسة لنشوف نوعها
+    const sessionRes = await axios.post("/api/stripe-session-info", {
+      slug,
+      orderId: reservationId,
+    });
 
-          if (res.status === 200) {
-            toast.success("✅ تم تأكيد الحجز بنجاح!");
-            toast.info("💳 سيتم إعادة المبلغ خلال 24 ساعة إذا تم رفض الحجز.");
-          } else {
-            toast.error("❌ فشل تأكيد الحجز.");
-          }
-        } else {
-          // ✅ حالة الطلب
-          const sessionRes = await axios.post("/api/stripe-session-info", {
-            slug,
-            orderId: reservationId,
-          });
+    const { sessionId: realSessionId, metadata } = sessionRes.data;
 
-          const { sessionId: realSessionId } = sessionRes.data;
+    if (!realSessionId || !metadata) {
+      toast.error("❌ فشل الحصول على بيانات الجلسة.");
+      return;
+    }
 
-          if (realSessionId) {
-            await axios.post("/api/stripe-order-success", {
-              sessionId: realSessionId,
-              slug,
-              orderId: reservationId,
-            });
+    if (metadata.isBooking === "true") {
+      // ✅ تأكيد الحجز
+      const res = await axios.post("/api/verify-checkout-session", {
+        sessionId: realSessionId,
+        slug,
+        reservationId,
+      });
 
-            toast.success("✅ تم تأكيد الطلب بنجاح!");
-            clearCart();
-          } else {
-            toast.error("❌ فشل الحصول على جلسة الدفع.");
-          }
-        }
-      } catch (err) {
-        console.error("❌ Error confirming:", err);
-        toast.error("❌ فشل تأكيد العملية.");
+      if (res.status === 200) {
+        toast.success("✅ تم تأكيد الحجز بنجاح!");
+        toast.info("💳 سيتم إعادة المبلغ خلال 24 ساعة إذا تم رفض الحجز.");
+      } else {
+        toast.error("❌ فشل تأكيد الحجز.");
       }
-    };
+    } else {
+      // ✅ تأكيد الطلب من السلة
+      await axios.post("/api/stripe-order-success", {
+        sessionId: realSessionId,
+        slug,
+        orderId: reservationId,
+      });
+
+      toast.success("✅ تم تأكيد الطلب بنجاح!");
+      clearCart();
+    }
+  } catch (err) {
+    console.error("❌ Error confirming:", err);
+    toast.error("❌ حدث خطأ أثناء التأكيد.");
+  }
+};
+
 
     if (paymentStatus === "success") {
       handleSuccess();

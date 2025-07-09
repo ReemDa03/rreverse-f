@@ -102,6 +102,7 @@ export default async function handler(req, res) {
 
     const metadata = isBooking
       ? {
+         isBooking: "true", // ✅ مميز الحجز
           slug,
           reservationId,
           name,
@@ -110,6 +111,7 @@ export default async function handler(req, res) {
           time,
         }
       : {
+          isBooking: "false", // ✅ مميز الطلب
           slug,
           orderId: reservationId,
           name,
@@ -151,6 +153,7 @@ export default async function handler(req, res) {
     res.status(200).json({ id: session.id, url: session.url });
   } catch (err) {
     console.error("❌ Stripe Error:", err);
-    res.status(500).json({ error: "Server error" });
+    res.status(200).json({ sessionId: session.id, metadata: session.metadata });
+
   }
 }
