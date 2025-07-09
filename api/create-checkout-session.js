@@ -42,9 +42,16 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
-  if (!isBooking && (!phone || !cartItems || cartItems.length === 0)) {
-    return res.status(400).json({ error: "Missing order details" });
-  }
+  if (
+  !isBooking &&
+  (
+    !cartItems || cartItems.length === 0 ||            // لازم في عناصر
+    (dineOption !== "inside" && !phone)               // الهاتف مطلوب إلا إذا داخل المطعم
+  )
+) {
+  return res.status(400).json({ error: "Missing order details" });
+}
+
 
   try {
     const docRef = db.collection("ReVerse").doc(slug);
@@ -121,6 +128,8 @@ export default async function handler(req, res) {
           orderId: reservationId,
           name,
           phone,
+           dineOption,          // ⭐️ مُضاف
+      tableNumber,         // ⭐️ مُضاف لو inside
           total: total.toString(),
           itemsCount: cartArray.length.toString(),
           cartSummary: cartArray
