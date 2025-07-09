@@ -22,21 +22,18 @@ export default async function handler(req, res) {
     slug,
     reservationId,
     isBooking,
-    success_url,
-    cancel_url,
     name,
     tableSize,
     date,
     time,
     phone,
     cartItems,
-    dineOption, // ✅ أضفها
-  customerInfo, // ✅ أضفها
-  notes, // ✅
-  tableNumber, // ✅
+    dineOption,
+    customerInfo,
+    notes,
+    tableNumber,
   } = req.body;
 
-  // ✅ تحقق من الحقول المطلوبة
   if (!slug) {
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -70,71 +67,69 @@ export default async function handler(req, res) {
       apiVersion: "2023-10-16",
     });
 
-    // ✅ روابط النجاح والإلغاء
-    const finalSuccessUrl = isBooking
-  ? `https://rreverse-f.vercel.app/stripe-booking-success?slug=${slug}&reservationId=${reservationId}&session_id=${session.id}`
-  : `https://rreverse-f.vercel.app/stripe-order-success?slug=${slug}&orderId=${reservationId}&session_id=${session.id}`;
+    // ✅ روابط النجاح والإلغاء (فيها PLACEHOLDER بدل session.id)
+    const successUrlTemplate = isBooking
+      ? `https://rreverse-f.vercel.app/stripe-booking-success?slug=${slug}&reservationId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`
+      : `https://rreverse-f.vercel.app/stripe-order-success?slug=${slug}&orderId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`;
 
-    let finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
+    const cancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
 
-    // ✅ احفظ بيانات الطلب الحقيقية مؤقتًا في Firestore (مش داخل Stripe)
+    // ✅ حفظ بيانات مؤقتة للطلبات (لما تكون مو حجز)
     if (!isBooking) {
-  await db
-    .collection("ReVerse")
-    .doc(slug)
-    .collection("TempOrders")
-    .doc(reservationId)
-    .set({
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      cartItems,
-      phone,
-      name,
-      total,
-      dineOption,
-      customerInfo,
-      notes,
-      tableNumber,
-    });
-}
+      await db
+        .collection("ReVerse")
+        .doc(slug)
+        .collection("TempOrders")
+        .doc(reservationId)
+        .set({
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          cartItems,
+          phone,
+          name,
+          total,
+          dineOption,
+          customerInfo,
+          notes,
+          tableNumber,
+        });
+    }
 
-
-    // ✅ تحديد السعر بالدولار أو حسب إعدادات المطعم
     const unitAmount = isBooking
       ? (depositAmount || 1) * 100
       : (total || 1) * 100;
 
-    // ✅ تجهيز metadata آمنة ومختصرة
-    const cartArray = Array.isArray(cartItems) ? cartItems : Object.values(cartItems || {});
+    const cartArray = Array.isArray(cartItems)
+      ? cartItems
+      : Object.values(cartItems || {});
 
-const metadata = isBooking
-  ? {
-      slug,
-      reservationId,
-      name,
-      tableSize,
-      date,
-      time,
-    }
-  : {
-      slug,
-      orderId: reservationId,
-      name,
-      phone,
-      total: total.toString(),
-      itemsCount: cartArray.length.toString(),
-      cartSummary: cartArray
-        .map((item) => `${item.name} (${item.quantity})`)
-        .join(", ")
-        .slice(0, 400),
-    };
+    const metadata = isBooking
+      ? {
+          slug,
+          reservationId,
+          name,
+          tableSize,
+          date,
+          time,
+        }
+      : {
+          slug,
+          orderId: reservationId,
+          name,
+          phone,
+          total: total.toString(),
+          itemsCount: cartArray.length.toString(),
+          cartSummary: cartArray
+            .map((item) => `${item.name} (${item.quantity})`)
+            .join(", ")
+            .slice(0, 400),
+        };
 
-
-    // ✅ إنشاء الجلسة مع Stripe
+    // ✅ إنشاء جلسة Stripe بعد ما نجهز كلشي
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
-      success_url: finalSuccessUrl,
-      cancel_url: finalCancelUrl,
+      success_url: successUrlTemplate,
+      cancel_url: cancelUrl,
       line_items: [
         {
           price_data: {
@@ -151,7 +146,7 @@ const metadata = isBooking
     });
 
     console.log("✅ Stripe Session Created:", session.id);
-    console.log("➡️ Success URL:", finalSuccessUrl);
+    console.log("➡️ Success URL Template:", successUrlTemplate);
 
     res.status(200).json({ id: session.id, url: session.url });
   } catch (err) {
