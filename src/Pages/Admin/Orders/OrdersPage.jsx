@@ -254,9 +254,10 @@ const OrdersPage = () => {
                   <p>
                     💳 {t("orders.payment")}:{" "}
                     {order.paymentMethod === "online" &&
-                      (order.paymentStatus === "paid"
-                        ? "✅ Paid Online"
-                        : "❗ Unpaid - Online Selected")}
+  (order.paymentStatus === "paid"
+    ? "💳 Paid by Card"
+    : "❗ Payment Failed")}
+
                     {order.paymentMethod === "cash" && "💵 Cash on Delivery"}
                     {!order.paymentMethod && "—"}
                   </p>

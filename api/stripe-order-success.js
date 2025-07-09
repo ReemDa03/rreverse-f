@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     phone: tempData.phone,
     total: tempData.total,
     paymentStatus: "paid",
-    paymentMethod: "Stripe",
+    paymentMethod: "online",
     createdAt: admin.firestore.Timestamp.now(),
     isSeen: false,
     stripeSessionId: sessionId,
