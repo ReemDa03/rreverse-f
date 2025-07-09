@@ -93,8 +93,9 @@ export default async function handler(req, res) {
     }
 
     const unitAmount = isBooking
-      ? (depositAmount || 1) * 100
-      : (total || 1) * 100;
+  ? Math.round((depositAmount || 1) * 100)
+  : Math.round((total || 1) * 100);
+
 
     const cartArray = Array.isArray(cartItems)
       ? cartItems
