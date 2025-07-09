@@ -16,7 +16,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  // ✅ جلب البيانات من الطلب
   const {
     total,
     currency,
@@ -29,25 +28,20 @@ export default async function handler(req, res) {
     tableSize,
     date,
     time,
-    
-  // ✅ هدول ضيفهم 👇
-  phone,
-  cartItems,
+    phone,
+    cartItems,
   } = req.body;
 
-  // ✅ تحقق من البيانات الأساسية
+  // ✅ تحقق من الحقول المطلوبة
   if (!slug) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
-  
-// ✅ تحقق من بيانات الطلب العادي إذا مش حجز
-if (!isBooking && (!phone || !cartItems)) {
-  return res.status(400).json({ error: "Missing order details" });
-}
+  if (!isBooking && (!phone || !cartItems || cartItems.length === 0)) {
+    return res.status(400).json({ error: "Missing order details" });
+  }
 
   try {
-    // ✅ جلب بيانات المطعم من Firestore
     const docRef = db.collection("ReVerse").doc(slug);
     const docSnap = await docRef.get();
 
@@ -56,7 +50,6 @@ if (!isBooking && (!phone || !cartItems)) {
     }
 
     const data = docSnap.data();
-
     const {
       stripeSecretKey,
       success_url: fallbackSuccessUrl,
@@ -65,34 +58,66 @@ if (!isBooking && (!phone || !cartItems)) {
       depositAmount,
     } = data;
 
-    // ✅ تحقق من وجود بيانات Stripe الأساسية
     if (!stripeSecretKey || !fallbackSuccessUrl || !fallbackCancelUrl) {
       return res.status(400).json({ error: "Stripe data missing" });
     }
 
-    // ✅ إنشاء اتصال مع Stripe باستخدام المفتاح السري الخاص بكل مطعم
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: "2023-10-16",
     });
 
-    // ✅ تخصيص روابط النجاح والإلغاء
-    let finalSuccessUrl = success_url || fallbackSuccessUrl;
-    let finalCancelUrl = cancel_url || fallbackCancelUrl;
+    // ✅ روابط النجاح والإلغاء
+    let finalSuccessUrl = isBooking
+      ? `https://rreverse-f.vercel.app/stripe-booking-success?slug=${slug}&reservationId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`
+      : `https://rreverse-f.vercel.app/stripe-order-success?slug=${slug}&orderId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`;
 
-    if (isBooking && reservationId) {
-  finalSuccessUrl = `https://rreverse-f.vercel.app/stripe-booking-success?slug=${slug}&reservationId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`;
-  finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
-} else {
-  finalSuccessUrl = `https://rreverse-f.vercel.app/stripe-order-success?slug=${slug}&orderId=${reservationId}&session_id={CHECKOUT_SESSION_ID}`;
-    finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
-}
+    let finalCancelUrl = `https://rreverse-f.vercel.app/stripe-redirect?payment=cancel&slug=${slug}`;
 
-    // ✅ تحديد السعر: هل هو مبلغ الحجز أم مبلغ طلب عادي؟
+    // ✅ احفظ بيانات الطلب الحقيقية مؤقتًا في Firestore (مش داخل Stripe)
+    if (!isBooking) {
+      await db
+        .collection("ReVerse")
+        .doc(slug)
+        .collection("TempOrders")
+        .doc(reservationId)
+        .set({
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          cartItems,
+          phone,
+          name,
+          total,
+        });
+    }
+
+    // ✅ تحديد السعر بالدولار أو حسب إعدادات المطعم
     const unitAmount = isBooking
       ? (depositAmount || 1) * 100
       : (total || 1) * 100;
 
-    // ✅ إنشاء جلسة الدفع مع Stripe
+    // ✅ تجهيز metadata آمنة ومختصرة
+    const metadata = isBooking
+      ? {
+          slug,
+          reservationId,
+          name,
+          tableSize,
+          date,
+          time,
+        }
+      : {
+          slug,
+          orderId: reservationId,
+          name,
+          phone,
+          total: total.toString(),
+          itemsCount: cartItems.length.toString(),
+          cartSummary: cartItems
+            .map((item) => `${item.name} (${item.quantity})`)
+            .join(", ")
+            .slice(0, 400), // ✅ نضمن ما يتجاوز 500 حرف
+        };
+
+    // ✅ إنشاء الجلسة مع Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -110,34 +135,12 @@ if (!isBooking && (!phone || !cartItems)) {
           quantity: 1,
         },
       ],
-      // ✅ تمرير بيانات الحجز داخل metadata حتى نسترجعها لاحقًا من Stripe
-      metadata: isBooking
-  ? {
-      slug,
-      reservationId,
-      name,
-      tableSize,
-      date,
-      time,
-    }
-  : {
-      slug,
-      orderId: reservationId, // نفسه orderId
-      name,
-      phone,
-      itemsCount: cartItems.length,
-cartSummary: cartItems.map(item => `${item.name} (${item.quantity})`).join(", ").slice(0, 100), // 👈 للاحتياط
-
-      total,
-    },
-
+      metadata,
     });
 
     console.log("✅ Stripe Session Created:", session.id);
     console.log("➡️ Success URL:", finalSuccessUrl);
-    console.log("⛔ Cancel URL:", finalCancelUrl);
 
-    // ✅ أرسل session ID و URL إلى الواجهة
     res.status(200).json({ id: session.id, url: session.url });
   } catch (err) {
     console.error("❌ Stripe Error:", err);
