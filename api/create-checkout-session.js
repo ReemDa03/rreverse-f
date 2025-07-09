@@ -30,6 +30,10 @@ export default async function handler(req, res) {
     time,
     phone,
     cartItems,
+    dineOption, // ✅ أضفها
+  customerInfo, // ✅ أضفها
+  notes, // ✅
+  tableNumber, // ✅
   } = req.body;
 
   // ✅ تحقق من الحقول المطلوبة

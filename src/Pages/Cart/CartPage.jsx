@@ -91,10 +91,12 @@ const CartPage = () => {
     size: item.size,
     notes: item.notes || "",
   })),
-  dineOption,
-  customerInfo,
-  notes,
-  tableNumber,
+  dineOption, // ✅ ضروري
+  customerInfo, // ✅ ضروري (فارغ إذا dineOption === "inside")
+  tableNumber, // ✅ ضروري (فارغ إذا dineOption === "outside")
+  notes, // ✅ إذا بدكها توصل
+  cartItems: Object.values(cartItems), // لازم تكون Array
+
 });
 
       const sessionId = res.data.id;
