@@ -22,7 +22,12 @@ export default async function handler(req, res) {
 
     const sessions = await stripe.checkout.sessions.list({ limit: 10 });
 
-    const session = sessions.data.find((s) => s.metadata?.orderId === orderId);
+    const session = sessions.data.find(
+  (s) =>
+    s.metadata?.orderId === orderId ||
+    s.metadata?.reservationId === orderId
+);
+
     if (!session) return res.status(404).json({ error: "Session not found" });
 
     res.status(200).json({ sessionId: session.id });
