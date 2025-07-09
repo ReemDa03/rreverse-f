@@ -74,12 +74,12 @@ const CartPage = () => {
 
       
     // ✅ نعبي بيانات الاسم والرقم إذا فاضية وكان داخل المطعم
-    let tempCustomerInfo = { ...customerInfo };
+   const customer = { ...customerInfo };
 
-if (dineOption === "inside") {
-  if (!tempCustomerInfo.name) tempCustomerInfo.name = `Guest-${orderId.slice(-4)}`;
-  if (!tempCustomerInfo.phone) tempCustomerInfo.phone = "0000000000";
-}
+    if (dineOption === "inside") {
+      if (!customer.name) customer.name = `Guest-${orderId.slice(-4)}`;
+      if (!customer.phone) customer.phone = "0000000000";
+    }
 
 
 
@@ -100,7 +100,7 @@ if (dineOption === "inside") {
           notes: item.notes || "",
         })),
         dineOption, // ✅ ضروري
-         customerInfo: tempCustomerInfo,
+         customerInfo: customer,
         tableNumber, // ✅ ضروري (فارغ إذا dineOption === "outside")
         notes, // ✅ إذا بدكها توصل
       });
