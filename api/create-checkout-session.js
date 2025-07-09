@@ -152,8 +152,8 @@ export default async function handler(req, res) {
 
     res.status(200).json({ id: session.id, url: session.url });
   } catch (err) {
-    console.error("❌ Stripe Error:", err);
-    res.status(200).json({ sessionId: session.id, metadata: session.metadata });
+  console.error("❌ Stripe Error:", err);
+  res.status(500).json({ error: err.message || "Stripe session creation failed" });
+}
 
-  }
 }

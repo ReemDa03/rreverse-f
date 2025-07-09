@@ -30,9 +30,10 @@ export default async function handler(req, res) {
 
     if (!session) return res.status(404).json({ error: "Session not found" });
 
+    
     res.status(200).json({ sessionId: session.id });
   } catch (err) {
     console.error("❌ stripe-session-info error:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
+    res.status(200).json({ sessionId: session.id, metadata: session.metadata });
+ }
 }
