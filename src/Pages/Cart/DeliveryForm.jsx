@@ -47,6 +47,7 @@ const DeliveryForm = ({
       return;
     }
     setError(false);
+    setDineOption("outside"); // ✅ أضف هذا السطر
     setShowCashModal({ show: true, dineOption: "outside" });
 
   };

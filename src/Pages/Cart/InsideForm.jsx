@@ -43,6 +43,7 @@ const InsideForm = ({
       return;
     }
     setError(false);
+    setDineOption("inside"); // ✅ أضف هذا السطر لضمان حفظ القيمة
     setShowCashModal({ show: true, dineOption: "inside" });
   };
 
