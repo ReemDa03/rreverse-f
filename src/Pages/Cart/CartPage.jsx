@@ -30,7 +30,16 @@ const CartPage = () => {
     useContext(StoreContext);
   const [productsData, setProductsData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [dineOption, setDineOption] = useState(null);
+
+  const [dineOption, _setDineOption] = useState(null);
+const dineOptionRef = useRef(null);
+
+const setDineOption = (val) => {
+  dineOptionRef.current = val;
+  _setDineOption(val);
+};
+
+  
   const [tableNumber, setTableNumber] = useState(1);
   const [notes, setNotes] = useState("");
   const [showCashModal, setShowCashModal] = useState(false);
@@ -71,11 +80,12 @@ const CartPage = () => {
 
   const handleCardPayment = async () => {
     try {
-       console.log("🚨 dineOption before payment:", dineOption); // ← ضيفي هاد
-      if (!restaurantData?.stripePublicKey) {
-        toast.error("Stripe data missing. Please contact the restaurant.");
-        return;
-      }
+      console.log("🚨 dineOption before payment:", dineOptionRef.current);
+if (!dineOptionRef.current) {
+  toast.error("Please choose dining option before proceeding to payment.");
+  return;
+}
+
 
 
       const orderId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -89,7 +99,7 @@ const CartPage = () => {
       if (!customer.phone) customer.phone = "0000000000";
     }
 
-if (!dineOption) {
+if (!dineOptionRef.current) {
   toast.error("Please choose dining option before proceeding to payment.");
   return;
 }
@@ -111,7 +121,8 @@ phone: customer.phone,
           size: item.size,
           notes: item.notes || "",
         })),
-        dineOption, // ✅ ضروري
+        dineOption: dineOptionRef.current,
+ // ✅ ضروري
          customerInfo: customer,
         tableNumber, // ✅ ضروري (فارغ إذا dineOption === "outside")
         notes, // ✅ إذا بدكها توصل
@@ -169,7 +180,9 @@ phone: customer.phone,
     (acc, item) => acc + item.price * item.quantity,
     0
   );
-  const total = subtotal + (dineOption === "outside" ? deliveryFee : 0);
+
+  const total = subtotal + (dineOptionRef.current === "outside" ? deliveryFee : 0);
+
 
   // ✅ الدفع النقدي
   const handleCashPayment = async () => {
@@ -181,7 +194,10 @@ phone: customer.phone,
         quantity: item.quantity,
         size: item.size,
       })),
-      dineOption,
+
+      dineOption: dineOptionRef.current,
+
+      
       ...(dineOption === "inside" ? { tableNumber } : { customerInfo }),
       notes,
       total,
