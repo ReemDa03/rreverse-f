@@ -182,6 +182,7 @@ function ReservationForm({ slug }) {
           settings={settings}
           reservationId={reservationId}
           slug={slug}
+           planType={planType}
           onBookingSuccess={() => {
     setName("");
     setDate("");

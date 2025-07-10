@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next"; // ✅
 
-const BookClick = ({ onClose, settings, reservationId, slug, onBookingSuccess }) => {
+const BookClick = ({ onClose, settings, reservationId, slug, onBookingSuccess, planType }) => {
 
   const [paymentMethod, setPaymentMethod] = useState("");
   const [triedToSubmit, setTriedToSubmit] = useState(false);
@@ -127,14 +127,15 @@ setTimeout(() => {
           >
             💵 Pay with Cash
           </button>
-          <button
-            className={`method-btn ${
-              paymentMethod === "Stripe" ? "active" : ""
-            }`}
-            onClick={() => setPaymentMethod("Stripe")}
-          >
-            💳 Pay with Card
-          </button>
+          
+           {planType === "premium" && (
+    <button
+      className={`method-btn ${paymentMethod === "Stripe" ? "active" : ""}`}
+      onClick={() => setPaymentMethod("Stripe")}
+    >
+      💳 Pay with Card
+    </button>
+  )}
         </div>
         {triedToSubmit && !paymentMethod && (
           <p className="error-msg">{t("modal.error")}</p>
