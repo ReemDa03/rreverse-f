@@ -73,68 +73,57 @@ const CartPage = () => {
     }
   }, [location.search]);
 
-  const handleCardPayment = async () => {
-    try {
-      console.log("🚨 dineOption before payment:", dineOption);
+const handleCardPayment = async () => {
+  try {
+    const currentDineOption = showCashModal.dineOption;
+    console.log("🚨 dineOption before payment:", currentDineOption);
 
-if (!dineOption) {
+    if (!currentDineOption) {
+      toast.error("Please choose dining option before proceeding to payment.");
+      return;
+    }
 
-  toast.error("Please choose dining option before proceeding to payment.");
-  return;
-}
+    const orderId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    const customer = { ...customerInfo };
 
-
-
-      const orderId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-
-      
-    // ✅ نعبي بيانات الاسم والرقم إذا فاضية وكان داخل المطعم
-   const customer = { ...customerInfo };
-
-    if (dineOption === "inside") {
+    if (currentDineOption === "inside") {
       if (!customer.name) customer.name = `Guest-${orderId.slice(-4)}`;
       if (!customer.phone) customer.phone = "0000000000";
     }
 
-if (!dineOption) {
-  toast.error("Please choose dining option before proceeding to payment.");
-  return;
-}
+    const res = await axios.post("/api/create-checkout-session", {
+      total,
+      currency: restaurantData.currency || "usd",
+      slug,
+      isBooking: false,
+      reservationId: orderId,
+      name: customer.name,
+      phone: customer.phone,
+      cartItems: Object.values(cartItems).map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        size: item.size,
+        notes: item.notes || "",
+      })),
+      dineOption: currentDineOption, // ✅
+      customerInfo: customer,
+      tableNumber,
+      notes,
+    });
 
-      const res = await axios.post("/api/create-checkout-session", {
-        total,
-        currency: restaurantData.currency || "usd",
-        slug,
-        isBooking: false,
-        reservationId: orderId,
-        name: customer.name,
-phone: customer.phone,
+    const sessionId = res.data.id;
+    const stripe = window.Stripe(restaurantData.stripePublicKey);
+    await stripe.redirectToCheckout({ sessionId });
+  } catch (err) {
+    console.error("Stripe Error:", err);
+    toast.error(t("payment.errorCard"));
+  }
+};
 
-        cartItems: Object.values(cartItems).map((item) => ({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          size: item.size,
-          notes: item.notes || "",
-        })),
-        dineOption: dineOption,
- // ✅ ضروري
-         customerInfo: customer,
-        tableNumber, // ✅ ضروري (فارغ إذا dineOption === "outside")
-        notes, // ✅ إذا بدكها توصل
-      });
 
-      const sessionId = res.data.id;
-      const stripe = window.Stripe(restaurantData.stripePublicKey);
-      await stripe.redirectToCheckout({ sessionId });
-    } catch (err) {
-      console.error("Stripe Error:", err);
-      toast.error(t("payment.errorCard"));
-    }
-  };
-
-  // ✅ تحميل بيانات المنتجات
+// ✅ تحميل بيانات المنتجات
   useEffect(() => {
     const fetchData = async () => {
       const productMap = {};
