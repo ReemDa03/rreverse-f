@@ -76,11 +76,17 @@ const CartPage = () => {
     // ✅ نعبي بيانات الاسم والرقم إذا فاضية وكان داخل المطعم
    const customer = { ...customerInfo };
 
-    if (dineOption === "inside") {
-      if (!customer.name) customer.name = `Guest-${orderId.slice(-4)}`;
-      if (!customer.phone) customer.phone = "0000000000";
-    }
+if (dineOption === "inside") {
+  if (!customer.name) customer.name = `Guest-${orderId.slice(-4)}`;
+  if (!customer.phone) customer.phone = "0000000000";
+}
 
+
+
+if (!dineOption) {
+  toast.error("Please choose dining option before proceeding to payment.");
+  return;
+}
 
 
       const res = await axios.post("/api/create-checkout-session", {
