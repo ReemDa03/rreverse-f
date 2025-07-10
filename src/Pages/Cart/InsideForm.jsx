@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import "./InsideForm.css";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next"; // ✅
+import { toast } from "react-toastify";
+
 
 const InsideForm = ({
 
-   dineOption, // ✅ أضيفي هاد السطر
-
+   dineOption, // ✅ أضيفي هذا
   tableNumber,
   setTableNumber,
   notes,
@@ -42,7 +43,7 @@ const InsideForm = ({
       return;
     }
     setError(false);
-    setShowCashModal(true);
+    setShowCashModal({ show: true, dineOption: "inside" });
   };
 
   return (
@@ -84,7 +85,7 @@ const InsideForm = ({
 
         {error && <p className="error-text">{t("dinein.errorMsg")}</p>}
 
-        <button className="confirm-btn" onClick={handleProceed}>
+        <button className="confirm-btn"  onClick={handleProceed}>
           {t("dinein.proceedBtn")}
         </button>
       </motion.div>

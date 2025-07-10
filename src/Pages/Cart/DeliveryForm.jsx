@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Cart.css";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+
 
 const DeliveryForm = ({
   
@@ -45,7 +47,8 @@ const DeliveryForm = ({
       return;
     }
     setError(false);
-    setShowCashModal(true);
+    setShowCashModal({ show: true, dineOption: "outside" });
+
   };
 
   return (

@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
-
+import React, { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import { db } from "../../../firebase";
 import {
@@ -32,13 +31,8 @@ const CartPage = () => {
   const [productsData, setProductsData] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const [dineOption, _setDineOption] = useState(null);
-const dineOptionRef = useRef(null);
+  const [dineOption, setDineOption] = useState(null);
 
-const setDineOption = (val) => {
-  dineOptionRef.current = val;
-  _setDineOption(val);
-};
 
   
   const [tableNumber, setTableNumber] = useState(1);
@@ -81,8 +75,10 @@ const setDineOption = (val) => {
 
   const handleCardPayment = async () => {
     try {
-      console.log("🚨 dineOption before payment:", dineOptionRef.current);
-if (!dineOptionRef.current) {
+      console.log("🚨 dineOption before payment:", dineOption);
+
+if (!dineOption) {
+
   toast.error("Please choose dining option before proceeding to payment.");
   return;
 }
@@ -100,7 +96,7 @@ if (!dineOptionRef.current) {
       if (!customer.phone) customer.phone = "0000000000";
     }
 
-if (!dineOptionRef.current) {
+if (!dineOption) {
   toast.error("Please choose dining option before proceeding to payment.");
   return;
 }
@@ -122,7 +118,7 @@ phone: customer.phone,
           size: item.size,
           notes: item.notes || "",
         })),
-        dineOption: dineOptionRef.current,
+        dineOption: dineOption,
  // ✅ ضروري
          customerInfo: customer,
         tableNumber, // ✅ ضروري (فارغ إذا dineOption === "outside")
@@ -182,8 +178,7 @@ phone: customer.phone,
     0
   );
 
-  const total = subtotal + (dineOptionRef.current === "outside" ? deliveryFee : 0);
-
+const total = subtotal + (dineOption === "outside" ? deliveryFee : 0);
 
   // ✅ الدفع النقدي
   const handleCashPayment = async () => {
@@ -196,7 +191,7 @@ phone: customer.phone,
         size: item.size,
       })),
 
-      dineOption: dineOptionRef.current,
+      dineOption: dineOption,
 
       
       ...(dineOption === "inside" ? { tableNumber } : { customerInfo }),
@@ -305,14 +300,17 @@ phone: customer.phone,
           </div>
 
           {/* ✅ مودال الدفع */}
-          {showCashModal && (
+          {showCashModal.show &&  (
             <AnimatePresence mode="wait">
               <PaymentModal
                 key="payment-modal"
                 onConfirm={handleCashPayment}
-                onClose={() => setShowCashModal(false)}
+                onClose={() => setShowCashModal({ show: false, dineOption: null })}
+
                 onCardPayment={handleCardPayment}
                 planType={planType}
+                dineOption={showCashModal.dineOption}// ✅ مررناها صراحة
+                
               />
             </AnimatePresence>
           )}
