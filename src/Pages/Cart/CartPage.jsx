@@ -47,6 +47,13 @@ const CartPage = () => {
   const planType = restaurantData?.plan || "basic";
 
   useEffect(() => {
+  if (dineOption === "inside" || dineOption === "outside") {
+    console.log("🔥 dineOption now is:", dineOption);
+  }
+}, [dineOption]);
+
+
+  useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const paymentStatus = queryParams.get("payment");
 

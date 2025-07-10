@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next"; // ✅
 
 const InsideForm = ({
+
+   dineOption, // ✅ أضيفي هاد السطر
+   
   tableNumber,
   setTableNumber,
   notes,
@@ -26,6 +29,12 @@ const InsideForm = ({
   }, [setDineOption]);
 
   const handleProceed = () => {
+
+     if (!dineOption) {
+    toast.error("Please choose dine option first.");
+    return;
+  }
+  
     if (!tableNumber || tableNumber === "") {
       setError(true);
       return;

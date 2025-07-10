@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 const DeliveryForm = ({
+  
+   dineOption, // ✅ أضيفي هاد السطر
+   
   customerInfo,
   setCustomerInfo,
   notes,
@@ -28,6 +31,12 @@ const DeliveryForm = ({
 
   // ✅ التحقق من الحقول المطلوبة
   const handleProceed = () => {
+
+     if (!dineOption) {
+    toast.error("Please choose dine option first.");
+    return;
+  }
+
     const { name, phone, address } = customerInfo;
     if (!name || !phone || !address) {
       setError(true);
