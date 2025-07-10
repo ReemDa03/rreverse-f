@@ -28,24 +28,23 @@ const CartDetails = ({
 
       {!dineOption && (
         <div className="dine-option-buttons">
-  <button
-    onClick={() => {
-      setDineOption("inside");
-      console.log("✅ dineOption set to inside");
-    }}
-  >
-    {t("cart.inside")}
-  </button>
-  <button
-    onClick={() => {
-      setDineOption("outside");
-      console.log("✅ dineOption set to outside");
-    }}
-  >
-    {t("cart.outside")}
-  </button>
-</div>
-
+          <button
+            onClick={() => {
+              setDineOption("inside");
+              console.log("✅ dineOption set to inside");
+            }}
+          >
+            {t("cart.inside")}
+          </button>
+          <button
+            onClick={() => {
+              setDineOption("outside");
+              console.log("✅ dineOption set to outside");
+            }}
+          >
+            {t("cart.outside")}
+          </button>
+        </div>
       )}
     </div>
   );

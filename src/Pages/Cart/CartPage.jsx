@@ -71,6 +71,7 @@ const CartPage = () => {
 
   const handleCardPayment = async () => {
     try {
+       console.log("🚨 dineOption before payment:", dineOption); // ← ضيفي هاد
       if (!restaurantData?.stripePublicKey) {
         toast.error("Stripe data missing. Please contact the restaurant.");
         return;

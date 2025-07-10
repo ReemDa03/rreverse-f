@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next"; // ✅
 const InsideForm = ({
 
    dineOption, // ✅ أضيفي هاد السطر
-   
+
   tableNumber,
   setTableNumber,
   notes,
@@ -30,10 +30,12 @@ const InsideForm = ({
 
   const handleProceed = () => {
 
-     if (!dineOption) {
-    toast.error("Please choose dine option first.");
-    return;
-  }
+     if (!dineOption || (dineOption !== "inside" && dineOption !== "outside")) {
+  console.log("🚨 dineOption in payment:", dineOption);
+  toast.error("Please choose your dining option.");
+  return;
+}
+
   
     if (!tableNumber || tableNumber === "") {
       setError(true);

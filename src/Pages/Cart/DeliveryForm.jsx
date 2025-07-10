@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 const DeliveryForm = ({
   
    dineOption, // ✅ أضيفي هاد السطر
-   
+
   customerInfo,
   setCustomerInfo,
   notes,
@@ -32,10 +32,12 @@ const DeliveryForm = ({
   // ✅ التحقق من الحقول المطلوبة
   const handleProceed = () => {
 
-     if (!dineOption) {
-    toast.error("Please choose dine option first.");
-    return;
-  }
+     if (!dineOption || (dineOption !== "inside" && dineOption !== "outside")) {
+  console.log("🚨 dineOption in payment:", dineOption);
+  toast.error("Please choose your dining option.");
+  return;
+}
+
 
     const { name, phone, address } = customerInfo;
     if (!name || !phone || !address) {
