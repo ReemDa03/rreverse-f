@@ -47,9 +47,9 @@
 
 .language-switcher button.active,
 .language-switcher button:hover {
-  background-color: #ff7a00;
+  background-color: rgb(76, 175, 80);;
   color: white;
-  border-color: #ff7a00;
+  border-color: rgb(76, 175, 80);;
 }
 
 

@@ -105,7 +105,8 @@
 }
 .menu-item-special{
   display: grid;
-  grid-template-columns: 70px 1.5fr 20px 2fr 1.6fr 30px;
+  grid-template-columns: 70px 2fr auto auto 1fr;
+
   align-items: center;
   gap: 15px;
   padding-left: 10px;
@@ -150,7 +151,7 @@
 
 .menu-item__old-price {
   text-decoration: line-through;
-  color: #999;
+  color: tomato;
   margin-right: 8px;
 }
 
@@ -163,23 +164,6 @@
   padding-bottom: 4px;
 }
 
-.choices::-webkit-scrollbar {
-  height: 6px;
-}
-
-.choices::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.choices::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
-}
-
-.choices::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
 
 .choice-button {
   padding: 6px 10px;
@@ -357,7 +341,7 @@
   }
   .menu-item-special{
   
-  grid-template-columns: 70px 1.5fr 20px 2fr 2fr 30px;
+  grid-template-columns: 70px 1.5fr 20px 1fr 1fr;
   }
  
 }

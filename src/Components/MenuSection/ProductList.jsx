@@ -24,7 +24,7 @@ function ProductList({
 
   return (
     <div className="menu-items-wrapper">
-      <div className="menu-items-container">
+      <div className="menu-items-containerOn">
         {visibleProducts.map((prod, index) => {
           const selectedSize = selectedSizes[prod.id];
           const showError = sizeErrors[prod.id];
