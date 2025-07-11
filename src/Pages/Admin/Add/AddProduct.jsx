@@ -62,8 +62,8 @@ useEffect(() => {
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             const data = docSnap.data();
-            console.log("✅ adminUid from Firestore:", data.adminUid);
-            console.log("✅ Matching:", data.adminUid === user.uid);
+            
+            
           } else {
             console.log("❌ No such restaurant document");
           }
@@ -72,8 +72,7 @@ useEffect(() => {
         }
       });
 
-      console.log("🔥 currentUser:", auth.currentUser);
-
+      
     } catch (error) {
       console.error("🔥 Error checking admin:", error);
     }
