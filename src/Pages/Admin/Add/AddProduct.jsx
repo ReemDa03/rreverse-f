@@ -18,6 +18,12 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next"; // ✅
 
 
+  import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../../../firebase";
+
+
+
+
 function AddProduct() {
 
    const { t } = useTranslation(); // ✅
@@ -44,6 +50,38 @@ function AddProduct() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [planType, setPlanType] = useState("basic");
+
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          console.log("✅ Logged in as:", user.uid);
+          const docRef = doc(db, "ReVerse", slug);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            console.log("✅ adminUid from Firestore:", data.adminUid);
+            console.log("✅ Matching:", data.adminUid === user.uid);
+          } else {
+            console.log("❌ No such restaurant document");
+          }
+        } else {
+          console.log("❌ User not logged in");
+        }
+      });
+
+      console.log("🔥 currentUser:", auth.currentUser);
+
+    } catch (error) {
+      console.error("🔥 Error checking admin:", error);
+    }
+  };
+
+  fetchData();
+}, [slug]);
+
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -205,6 +243,10 @@ function AddProduct() {
       };
 
       const colRef = collection(db, "ReVerse", slug, "products");
+
+console.log("🟡 Product to Add:", newProduct);
+
+
       await addDoc(colRef, newProduct);
 
       toast.success("Product added successfully!");
@@ -222,6 +264,9 @@ function AddProduct() {
       setImageFile(null);
       setUploadedImageURL("");
     } catch (err) {
+
+ console.error("🔥 Failed to add product:", err);
+
       toast.error("Failed to add product.");
     }
   };
