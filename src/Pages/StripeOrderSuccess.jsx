@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { StoreContext } from "../context/StoreContext";
+import { useTranslation } from "react-i18next"; // ✅
 
 function StripeOrderSuccess() {
   const [params] = useSearchParams();
@@ -10,6 +11,7 @@ function StripeOrderSuccess() {
   const slug = params.get("slug");
   const orderId = params.get("orderId");
   const { clearCart } = useContext(StoreContext);
+   const { t } = useTranslation(); // ✅
 
   useEffect(() => {
     const confirmOrder = async () => {
@@ -20,20 +22,20 @@ function StripeOrderSuccess() {
           orderId,
         });
 
-        if (res.data?.message) {
-          toast.success("✅ تم تأكيد الطلب بنجاح!");
+        if (res.data?.message) { 
+          toast.success(t("orderStripe.confirmSuccess")); // ✅
           clearCart(); // ✅ تمام
         }
       } catch (err) {
-        console.error(err);
-        toast.error("❌ حدث خطأ أثناء تأكيد الطلب.");
+        console.error(err); 
+        toast.error(t("orderStripe.confirmFailed")); // ✅
       }
     };
 
     confirmOrder();
   }, [sessionId]);
 
-  return <h2>جارٍ تأكيد الطلب...</h2>;
+  return <h2>{t("orderStripe.confirming")}</h2>;
 }
 
 export default StripeOrderSuccess;

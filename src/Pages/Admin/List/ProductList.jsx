@@ -38,18 +38,18 @@ function ProductList() {
       const prodList = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setProducts(prodList);
     } catch (err) {
-      toast.error("Failed to fetch products.");
+      toast.error(t("products.fetchError"));
     }
   };
 
   const deleteProduct = async (id) => {
     try {
       await deleteDoc(doc(db, "ReVerse", slug, "products", id));
-      toast.success("Item deleted.");
+      toast.success(t("products.deleted"));
       fetchProducts();
       setConfirmDeleteId(null);
     } catch (err) {
-      toast.error("Delete failed.");
+      toast.error(t("products.deleteError"));
     }
   };
 
@@ -86,7 +86,7 @@ function ProductList() {
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
-          <option value="">All</option>
+          <option value="">{t("products.all")}</option>
           {categories.map((cat, i) => (
             <option key={i} value={cat}>
               {cat}
@@ -152,20 +152,19 @@ function ProductList() {
                    className="confirm-delete-box"
                 >
                   <span className="delete-warning-text">
-                    Are you sure you want to delete{" "}
-                    <strong>"{prod.name}"</strong>?
+                     {t("products.confirmDelete", { name: prod.name })}
                   </span>
                   <button
                     onClick={() => deleteProduct(prod.id)}
                     className="btn-delete-yes"
                   >
-                    Yes
+                    {t("products.yes")}
                   </button>
                   <button
                     onClick={() => setConfirmDeleteId(null)}
                      className="btn-delete-no"
                   >
-                    No
+                    {t("products.no")}
                   </button>
                 </div>
               )}

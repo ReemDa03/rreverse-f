@@ -29,10 +29,7 @@ const NavbarMe = () => {
     };
   }, [menuOpen]);
 
-  useEffect(() => {
-    document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
-  }, [i18n.language]);
-
+  
   return (
     <nav className="navbar-me">
       <div className="navbar__container animate-slideDown">

@@ -18,6 +18,11 @@ html, body {
 
 
 .navbar, .footer {
-  z-index: 1 !important;
+  z-index: 10 !important;
   position: relative;
+}
+
+.modal-overlay { 
+  position: relative;
+  z-index: 100001;
 }

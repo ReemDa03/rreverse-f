@@ -81,31 +81,30 @@ const OrdersPage = () => {
   };
 
   useEffect(() => {
-  let initialized = false;
+    let initialized = false;
 
-  const q = query(
-    collection(db, "ReVerse", slug, "orders"),
-    orderBy("createdAt", "desc")
-  );
+    const q = query(
+      collection(db, "ReVerse", slug, "orders"),
+      orderBy("createdAt", "desc")
+    );
 
-  const unsubscribe = onSnapshot(q, (snapshot) => {
-    if (!initialized) {
-      initialized = true;
-      return; // ❌ أول مرة لا تعمل شي (ما تعتبره New Order)
-    }
-
-    snapshot.docChanges().forEach((change) => {
-      if (change.type === "added") {
-        toast.info("🚨 New Order");
-        playSound();
-        fetchOrders();
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!initialized) {
+        initialized = true;
+        return; // ❌ أول مرة لا تعمل شي (ما تعتبره New Order)
       }
+
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+          toast.info("🚨 New Order");
+          playSound();
+          fetchOrders();
+        }
+      });
     });
-  });
 
-  return () => unsubscribe();
-}, [slug]);
-
+    return () => unsubscribe();
+  }, [slug]);
 
   useEffect(() => {
     fetchOrders();
@@ -237,27 +236,36 @@ const OrdersPage = () => {
 
                   {order.dineOption === "outside" && (
                     <>
-                      <p>{t("orders.name")}: {customer.name}</p>
-                      <p>{t("orders.address")}: {customer.address}</p>
-                      <p>{t("orders.phone")}: {customer.phone}</p>
+                      <p>
+                        {t("orders.name")}: {customer.name}
+                      </p>
+                      <p>
+                        {t("orders.address")}: {customer.address}
+                      </p>
+                      <p>
+                        {t("orders.phone")}: {customer.phone}
+                      </p>
                     </>
                   )}
 
                   {order.dineOption === "inside" && (
-                    <p>{t("orders.tableNumber")} : {order.tableNumber}</p>
+                    <p>
+                      {t("orders.tableNumber")} : {order.tableNumber}
+                    </p>
                   )}
 
                   {order.note && (
-                    <p>📝 {t("orders.note")}: {order.note}</p>
+                    <p>
+                      📝 {t("orders.note")}: {order.note}
+                    </p>
                   )}
 
                   <p>
                     💳 {t("orders.payment")}:{" "}
                     {order.paymentMethod === "online" &&
-  (order.paymentStatus === "paid"
-    ? "💳 Paid by Card"
-    : "❗ Payment Failed")}
-
+                      (order.paymentStatus === "paid"
+                        ? "💳 Paid by Card"
+                        : "❗ Payment Failed")}
                     {order.paymentMethod === "cash" && "💵 Cash on Delivery"}
                     {!order.paymentMethod && "—"}
                   </p>

@@ -339,7 +339,7 @@ function AddSpecial() {
         <div className="modal-overlay">
           <div className="modal-box">
             <p>
-              Are you sure you want to delete the entire section{" "}
+              {t("special.confirmDeleteSection")}{" "}
               <strong>"{existingTitle}"</strong>?
             </p>
             <div className="modal-buttons">
@@ -355,7 +355,7 @@ function AddSpecial() {
                   cursor: "pointer",
                 }}
               >
-                Yes
+                {t("buttons.yes")}
               </button>
               <button
                 onClick={() => setConfirmDeleteTitle(false)}
@@ -368,7 +368,7 @@ function AddSpecial() {
                   cursor: "pointer",
                 }}
               >
-                No
+                {t("buttons.no")}
               </button>
             </div>
           </div>
@@ -380,7 +380,8 @@ function AddSpecial() {
         <div className="modal-overlay">
           <div className="modal-box">
             <p>
-              Are you sure you want to delete{" "}
+              
+{t("special.confirmDeleteItem")}{" "}
               <strong>"{confirmDeleteItem.name}"</strong>?
             </p>
             <div className="modal-buttons">
@@ -388,10 +389,10 @@ function AddSpecial() {
                 className="yes"
                 onClick={() => handleDeleteItem(confirmDeleteItem)}
               >
-                Yes
+                {t("buttons.yes")}
               </button>
               <button className="no" onClick={() => setConfirmDeleteItem(null)}>
-                No
+                {t("buttons.no")}
               </button>
             </div>
           </div>

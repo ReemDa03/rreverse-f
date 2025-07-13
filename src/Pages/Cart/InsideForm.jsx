@@ -3,11 +3,10 @@ import "./InsideForm.css";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next"; // ✅
 import { toast } from "react-toastify";
-
+import ReactDOM from "react-dom"; // ✅ أضف هذا السطر
 
 const InsideForm = ({
-
-   dineOption, // ✅ أضيفي هذا
+  dineOption, // ✅ أضيفي هذا
   tableNumber,
   setTableNumber,
   notes,
@@ -30,14 +29,12 @@ const InsideForm = ({
   }, [setDineOption]);
 
   const handleProceed = () => {
+    if (!dineOption || (dineOption !== "inside" && dineOption !== "outside")) {
+      console.log("🚨 dineOption in payment:", dineOption);
+      toast.error(t("dinein.chooseDineOption"));
+      return;
+    }
 
-     if (!dineOption || (dineOption !== "inside" && dineOption !== "outside")) {
-  console.log("🚨 dineOption in payment:", dineOption);
-  toast.error("Please choose your dining option.");
-  return;
-}
-
-  
     if (!tableNumber || tableNumber === "") {
       setError(true);
       return;
@@ -47,7 +44,8 @@ const InsideForm = ({
     setShowCashModal({ show: true, dineOption: "inside" });
   };
 
-  return (
+  // ✅ غلفنا JSX في متغير قبل إرساله لـ Portal
+  const modalContent = (
     <div className="modal-overlay">
       <motion.div
         key="inside-modal"
@@ -86,12 +84,15 @@ const InsideForm = ({
 
         {error && <p className="error-text">{t("dinein.errorMsg")}</p>}
 
-        <button className="confirm-btn"  onClick={handleProceed}>
+        <button className="confirm-btn" onClick={handleProceed}>
           {t("dinein.proceedBtn")}
         </button>
       </motion.div>
     </div>
   );
+
+  // ✅ استخدام Portal لضمان أن المودال يظهر فوق كل العناصر دومًا
+  return ReactDOM.createPortal(modalContent, document.body);
 };
 
 export default InsideForm;

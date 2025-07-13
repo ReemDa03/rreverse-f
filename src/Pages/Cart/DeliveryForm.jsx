@@ -3,11 +3,10 @@ import "./Cart.css";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-
+import ReactDOM from "react-dom"; // ✅ أضف هذا السطر
 
 const DeliveryForm = ({
-  
-   dineOption, // ✅ أضيفي هاد السطر
+  dineOption, // ✅ أضيفي هاد السطر
 
   customerInfo,
   setCustomerInfo,
@@ -33,13 +32,12 @@ const DeliveryForm = ({
 
   // ✅ التحقق من الحقول المطلوبة
   const handleProceed = () => {
+    if (!dineOption || (dineOption !== "inside" && dineOption !== "outside")) {
+      console.log("🚨 dineOption in payment:", dineOption);
+      toast.error(t("delivery.chooseDineOption"));
 
-     if (!dineOption || (dineOption !== "inside" && dineOption !== "outside")) {
-  console.log("🚨 dineOption in payment:", dineOption);
-  toast.error("Please choose your dining option.");
-  return;
-}
-
+      return;
+    }
 
     const { name, phone, address } = customerInfo;
     if (!name || !phone || !address) {
@@ -49,10 +47,10 @@ const DeliveryForm = ({
     setError(false);
     setDineOption("outside"); // ✅ أضف هذا السطر
     setShowCashModal({ show: true, dineOption: "outside" });
-
   };
 
-  return (
+  // ✅ جمعنا المودال في متغير لاستخدامه في Portal
+  const modalContent = (
     <div className="modal-overlay">
       <motion.div
         key="delivery-modal"
@@ -106,9 +104,7 @@ const DeliveryForm = ({
           className="order-notes-input"
         />
 
-        {error && (
-          <p className="error-text">{t("delivery.errorMsg")}</p>
-        )}
+        {error && <p className="error-text">{t("delivery.errorMsg")}</p>}
 
         <button className="confirm-btn" onClick={handleProceed}>
           {t("delivery.proceedBtn")}
@@ -116,6 +112,9 @@ const DeliveryForm = ({
       </motion.div>
     </div>
   );
+
+  // ✅ رجعنا المحتوى عبر Portal
+  return ReactDOM.createPortal(modalContent, document.body);
 };
 
 export default DeliveryForm;

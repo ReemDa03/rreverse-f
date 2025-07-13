@@ -63,13 +63,11 @@ const CartPage = () => {
 
     if (paymentStatus === "success") {
       clearCart();
-      toast.success(
-        "✅ Your order has been received and is now being prepared!"
-      );
+     toast.success(t("cart.successMessage"));
     }
 
     if (paymentStatus === "cancel") {
-      toast.error("❌ Payment was canceled or failed.");
+      toast.error(t("cart.cancelMessage"));
     }
   }, [location.search]);
 
@@ -79,7 +77,8 @@ const handleCardPayment = async () => {
     console.log("🚨 dineOption before payment:", currentDineOption);
 
     if (!currentDineOption) {
-      toast.error("Please choose dining option before proceeding to payment.");
+      toast.error(t("payment.selectDiningOption"));
+
       return;
     }
 
@@ -197,12 +196,10 @@ const total = subtotal + (dineOption === "outside" ? deliveryFee : 0);
       clearCart();
       setNotes("");
       setShowCashModal(false);
-      toast.success("Your order has been received and is now being prepared!");
+      toast.success(t("cart.successMessage"));
     } catch (error) {
       console.error("Error placing order:", error);
-      toast.error(
-        "An error occurred while submitting your order. Please try again!"
-      );
+      toast.error(t("cart.errorMessage"));
     }
   };
 

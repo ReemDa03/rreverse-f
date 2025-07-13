@@ -69,6 +69,11 @@
   "cancel": "Cancel",
   "error": "Please select a payment method.",
   "success": "Reservation confirmed successfully!",
+    "cashSuccess": "The reservation request has been received. Please contact us to complete the payment and confirm your booking.",
+"noReservation": "No saved reservation data found.",
+"stripeError": "An error occurred while preparing the payment.",
+"cashFail": "Failed to create the reservation.",
+
   "instructions": {
     "vodafone": "Send the deposit to: {{number}}",
     "paypal": "Send the deposit to: {{account}}",
@@ -137,7 +142,25 @@
   "submit": "Add Product"
 }
 ,
+  "messagesA": {
+    "categoriesNotFound": "Categories not found.",
+    "fetchCategoriesFailed": "Failed to fetch categories.",
+    "uploadingImage": "Uploading image... Please wait",
+    "imageUploadSuccess": "Image uploaded successfully!",
+    "imageUploadFailed": "Image upload failed.",
+    "uploadingCategoryImage": "Uploading category image...",
+    "categoryImageUploaded": "Category image uploaded!",
+    "categoryNameRequired": "Please enter category name and upload an image.",
+    "categoryAdded": "Category added successfully!",
+    "categoryAddFailed": "Failed to add category.",
+    "waitImageUpload": "Please wait until image finishes uploading.",
+    "fillAllFields": "Please fill in all fields and set the size price.",
+    "productAdded": "Product added successfully!",
+    "productAddFailed": "Failed to add product."
+  },
 
+
+  
 "special": {
   "addSpecialItems": "Add Special Items",
   "sectionTitlePlaceholder": "Special Section Title",
@@ -161,10 +184,12 @@
 "bookings": {
   "back": "Back",
   "title": "Reservations Management",
+  "refundFailed": "Failed to refund the payment. Please check your internet connection or try again later.",
   "filters": {
     "all": "All",
     "pending": "Pending",
     "confirmed": "Confirmed",
+    
     "rejected": "Rejected"
   },
   "table": {
@@ -179,19 +204,38 @@
   "noBookings": "There are no future bookings.",
   "confirmDelete": "Are you sure you want to delete this booking?"
 },
+
+
 "categories": {
-  "title": "Category List",
-  "noCategories": "No categories found.",
-  "count": "{{count}} product(s)",
-  "confirmDelete": "Are you sure you want to delete \"{{name}}\"?"
-},
-"products": {
-  "title": "Product List",
-  "filterByCategory": "Filter by Category:",
-  "noProducts": "No products found.",
-  "fullDescription": "Full Description:",
-  "confirmDelete": "Are you sure you want to delete \"{{name}}\"?"
-},
+    "title": "Categories",
+    "noCategories": "No categories found.",
+    "deleted": "Category deleted.",
+    "fetchError": "Failed to fetch categories.",
+    "countError": "Failed to fetch product counts.",
+    "deleteError": "Delete failed.",
+    "confirmDelete": "Are you sure you want to delete \"{{name}}\"?",
+    "yes": "Yes",
+    "no": "No",
+    "productsCount": "{{count}} product(s)"
+  },
+
+
+  "products": {
+    "title": "Products",
+    "filterByCategory": "Filter by category",
+    "noProducts": "No products found.",
+    "fullDescription": "Full Description:",
+    "fetchError": "Failed to fetch products.",
+    "deleted": "Product deleted.",
+    "deleteError": "Delete failed.",
+    "confirmDelete": "Are you sure you want to delete \"{{name}}\"?",
+    "yes": "Yes",
+    "no": "No",
+    "all": "All",
+    "dash": "-"
+  },
+
+
 "orders": {
   "back": "Back",
   "title": "Welcome to Admin Panel for: {{slug}}",
@@ -240,8 +284,14 @@
    "price": "Price",
   "size": "Size",
    "emptyMessage": "Your cart is currently empty. Please add some products to your cart.",
-  "fullDescription": "Product Description"
+  "fullDescription": "Product Description",
+   "successMessage": "✅ Your order has been received and is now being prepared!",
+    "errorMessage": "❌ An error occurred while submitting your order. Please try again!",
+    "cancelMessage": "❌ Payment was canceled or failed."
 },
+
+
+
 "delivery": {
     "title": "Delivery Details",
     "instruction": "Please fill these fields",
@@ -250,7 +300,9 @@
     "addressPlaceholder": "Address",
     "notesPlaceholder": "Any notes or requests?",
     "errorMsg": "Please fill all required fields.",
-    "proceedBtn": "Proceed to Checkout"
+    "proceedBtn": "Proceed to Checkout",
+    "chooseDineOption": "Please choose your dining option."
+
   },
   "dinein": {
     "title": "Dine-In Details",
@@ -259,12 +311,21 @@
     "placeholder": "Enter your table number",
     "notesPlaceholder": "Any notes or requests?",
     "errorMsg": "Please select a table number.",
-    "proceedBtn": "Proceed to Checkout"
+    "proceedBtn": "Proceed to Checkout",
+    "chooseDineOption": "Please choose your dining option."
+
   },
    "payment": {
     "title": "Select Payment Method",
     "cash": "Confirm Cash Payment",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "errorCard": "❌ Something went wrong during card payment. Please try again.",
+    "selectDiningOption": "Please choose your dining option before proceeding to payment.",
+    "selectMethod": "Please select a payment method",
+"card": "Confirm Card Payment",
+"confirmCash": "💵 Pay with Cash",
+"confirmCard": "💳 Pay with Card"
+
   },
   "productList": {
     "noProduct": "There is no product",
@@ -272,6 +333,19 @@
     "viewMore": "View More ▼",
     "viewLess": "View Less ▲"
   },
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
   "navbarMe": {
     "features": "Features",
@@ -400,7 +474,45 @@
       "button": "Contact Us"
     },
     "copyright": "All rights reserved."
-  }
+  },
+  "paymentMethods": {
+    "cash": "💵 Pay with Cash",
+    "card": "💳 Pay with Card"
+  },
+  "bookingStripe": {
+    "success": "✅ Booking confirmed successfully after payment!",
+    "verifyError": "❌ An error occurred while verifying the payment.",
+    "stripeError": "⚠️ There was a problem verifying with Stripe.",
+    "thankYou": "🚀 Thank you!",
+    "checking": "Verifying your payment...",
+    "done": "Process completed"
+  },
+  "stripe": {
+    "confirmLinkInvalid": "❌ Confirmation link is incomplete",
+    "confirmSuccess": "✅ Booking confirmed successfully!",
+    "refundInfo": "💳 The amount will be refunded within 24 hours if the booking is rejected.",
+    "confirmFailed": "❌ Failed to confirm booking.",
+    "serverError": "❌ Server connection error.",
+    "confirming": "Confirming your booking...",
+    "wait": "Please wait a moment"
+  },
+  "orderStripe": {
+  "confirmSuccess": "✅ Order confirmed successfully!",
+  "confirmFailed": "❌ An error occurred while confirming the order.",
+  "confirming": "Confirming your order..."
+},
+"stripeRedirect": {
+  "incompleteData": "❌ Incomplete data for payment confirmation.",
+  "sessionFetchFailed": "❌ Failed to fetch session data.",
+  "bookingConfirmed": "✅ Booking confirmed successfully!",
+  "bookingRefundInfo": "💳 The amount will be refunded within 24 hours if the booking is rejected.",
+  "bookingFailed": "❌ Failed to confirm booking.",
+  "orderConfirmed": "✅ Order confirmed successfully!",
+  "confirmationError": "❌ An error occurred during confirmation.",
+  "paymentCanceled": "❌ Payment was canceled or failed.",
+  "confirming": "Confirming..."
+}
+
 
 
   

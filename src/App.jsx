@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+
 import { Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import "./App.css";
@@ -24,10 +25,19 @@ import StripeRedirectWrapper from "./Pages/StripeRedirectWrapper";
 import StripeBookingSuccess from "./Pages/StripeBookingSuccess";
 import StripeOrderSuccess from "./Pages/StripeOrderSuccess";
 
+import { useTranslation } from "react-i18next"; // ⬅️ استدعاء الترجمة
 
 const App = () => {
 
   const location = useLocation();
+  const { i18n } = useTranslation(); // ⬅️ استخدام اللغة الحالية
+
+
+  
+  useEffect(() => {
+    document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
+    document.documentElement.lang = i18n.language;
+  }, [i18n.language]);
 
   return (
 

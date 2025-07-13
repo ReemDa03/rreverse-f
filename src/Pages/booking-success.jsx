@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useTranslation } from "react-i18next"; // ✅
 
 export default function BookingSuccess() {
+    const { t } = useTranslation(); // ✅
   const router = useRouter();
   const { session_id } = router.query;
   const [loading, setLoading] = useState(true);
@@ -22,13 +24,13 @@ export default function BookingSuccess() {
         const data = await res.json();
 
         if (res.ok) {
-          toast.success("✅ تم الحجز بنجاح بعد الدفع!");
+           toast.success(t("booking.success")); // ✅
         } else {
-          toast.error("❌ حدث خطأ أثناء التحقق من الدفع.");
+          toast.error(t("booking.verifyError")); // ✅
         }
       } catch (err) {
         console.error("Error verifying booking:", err);
-        toast.error("⚠️ مشكلة في التحقق من Stripe");
+        toast.error(t("booking.stripeError")); // ✅
       } finally {
         setLoading(false);
       }
@@ -39,8 +41,8 @@ export default function BookingSuccess() {
 
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
-      <h1>🚀 شكراً لك!</h1>
-      <p>{loading ? "جارٍ التحقق من الدفع..." : "تمت العملية"}</p>
+      <h1>{t("booking.thankYou")}</h1>
+      <p>{loading ? t("booking.checking") : t("booking.done")}</p>
       <ToastContainer position="top-center" />
     </div>
   );

@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next"; // ✅
 
 const StripeBookingSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+   const { t } = useTranslation(); // ✅
 
   const sessionId = searchParams.get("session_id");
   const slug = searchParams.get("slug");
@@ -13,7 +15,7 @@ const StripeBookingSuccess = () => {
   useEffect(() => {
     const confirmBooking = async () => {
       if (!sessionId || !slug || !reservationId) {
-        toast.error("❌ رابط التأكيد غير مكتمل");
+        toast.error(t("stripe.confirmLinkInvalid")); // ✅
         return;
       }
 
@@ -30,15 +32,15 @@ const StripeBookingSuccess = () => {
 
         const data = await res.json();
 
-        if (res.ok) {
-          toast.success("✅ تم تأكيد الحجز بنجاح!");
-          toast.info("💳 سيتم إعادة المبلغ خلال 24 ساعة إذا تم رفض الحجز.");
+        if (res.ok) { 
+          toast.success(t("stripe.confirmSuccess")); // ✅
+          toast.info(t("stripe.refundInfo")); // ✅
         } else {
-          toast.error(data.error || "❌ فشل تأكيد الحجز.");
+          toast.error(data.error || t("stripe.confirmFailed")); // ✅
         }
       } catch (err) {
         console.error(err);
-        toast.error("❌ مشكلة في الاتصال بالخادم.");
+        toast.error(t("stripe.serverError")); // ✅
       }
 
       setTimeout(() => {
@@ -51,8 +53,8 @@ const StripeBookingSuccess = () => {
 
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
-      <h2>جارٍ تأكيد حجزك...</h2>
-      <p>يرجى الانتظار لحظة</p>
+      <h2>{t("stripe.confirming")}</h2>
+      <p>{t("stripe.wait")}</p>
     </div>
   );
 };

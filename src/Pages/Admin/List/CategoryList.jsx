@@ -23,10 +23,11 @@ function CategoryList() {
         const data = docSnap.data();
         setCategories(data.categories || []);
       } else {
-        toast.error("No categories found.");
+        toast.error(t("categories.noCategories"));
+
       }
     } catch (err) {
-      toast.error("Failed to fetch categories.");
+      toast.error(t("categories.fetchError"));
     }
   };
 
@@ -46,7 +47,7 @@ function CategoryList() {
 
       setProductCounts(countMap);
     } catch (err) {
-      toast.error("Failed to fetch product counts.");
+      toast.error(t("categories.countError"));
     }
   };
 
@@ -56,10 +57,10 @@ function CategoryList() {
       const docRef = doc(db, "ReVerse", slug);
       await updateDoc(docRef, { categories: updated });
       setCategories(updated);
-      toast.success("Category deleted.");
+      toast.success(t("categories.deleted"));
       setConfirmDeleteIndex(null);
     } catch (err) {
-      toast.error("Delete failed.");
+      toast.error(t("categories.deleteError"));
     }
   };
 
@@ -103,7 +104,8 @@ function CategoryList() {
               <div style={{ flexGrow: 1 }}>
                 <strong>{cat.name}</strong>
                 <p style={{ fontSize: "12px", color: "#666", marginTop: "4px" }}>
-                  {productCounts[cat.name] || 0} product(s)
+                  {t("categories.productsCount", { count: productCounts[cat.name] || 0 })}
+
                 </p>
               </div>
 
@@ -135,8 +137,7 @@ function CategoryList() {
                   }}
                 >
                   <span style={{ fontSize: "12px" }}>
-                    Are you sure you want to delete{" "}
-                    <strong>"{cat.name}"</strong>?
+                    {t("categories.confirmDelete", { name: cat.name })}
                   </span>
                   <button
                     onClick={() => deleteCategory(index)}
@@ -148,7 +149,7 @@ function CategoryList() {
                       borderRadius: "4px",
                     }}
                   >
-                    Yes
+                    {t("categories.yes")}
                   </button>
                   <button
                     onClick={() => setConfirmDeleteIndex(null)}
@@ -160,7 +161,7 @@ function CategoryList() {
                       borderRadius: "4px",
                     }}
                   >
-                    No
+                    {t("categories.no")}
                   </button>
                 </div>
               )}

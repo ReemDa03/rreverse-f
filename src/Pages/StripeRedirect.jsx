@@ -3,11 +3,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { StoreContext } from "../context/StoreContext";
+import { useTranslation } from "react-i18next"; // ✅
 
 const StripeRedirect = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { clearCart } = useContext(StoreContext);
+   const { t } = useTranslation(); // ✅
 
   const hasHandled = useRef(false);
 
@@ -24,7 +26,7 @@ const StripeRedirect = () => {
   const handleSuccess = async () => {
   try {
     if (!sessionId || !slug || !reservationId) {
-      toast.error("❌ بيانات غير مكتملة لتأكيد الدفع.");
+          toast.error(t("stripeRedirect.incompleteData")); // ✅
       return;
     }
 
@@ -37,7 +39,7 @@ const StripeRedirect = () => {
     const { sessionId: realSessionId, metadata } = sessionRes.data;
 
     if (!realSessionId || !metadata) {
-      toast.error("❌ فشل الحصول على بيانات الجلسة.");
+          toast.error(t("stripeRedirect.sessionFetchFailed")); // ✅
       return;
     }
 
@@ -50,10 +52,10 @@ const StripeRedirect = () => {
       });
 
       if (res.status === 200) {
-        toast.success("✅ تم تأكيد الحجز بنجاح!");
-        toast.info("💳 سيتم إعادة المبلغ خلال 24 ساعة إذا تم رفض الحجز.");
+            toast.success(t("stripeRedirect.bookingConfirmed")); // ✅
+            toast.info(t("stripeRedirect.bookingRefundInfo")); // ✅
       } else {
-        toast.error("❌ فشل تأكيد الحجز.");
+            toast.error(t("stripeRedirect.bookingFailed")); // ✅
       }
     } else {
       // ✅ تأكيد الطلب من السلة
@@ -62,13 +64,12 @@ const StripeRedirect = () => {
         slug,
         orderId: reservationId,
       });
-
-      toast.success("✅ تم تأكيد الطلب بنجاح!");
+ toast.success(t("stripeRedirect.orderConfirmed")); // ✅
       clearCart();
     }
   } catch (err) {
     console.error("❌ Error confirming:", err);
-    toast.error("❌ حدث خطأ أثناء التأكيد.");
+        toast.error(t("stripeRedirect.confirmationError")); // ✅
   }
 };
 
@@ -76,7 +77,7 @@ const StripeRedirect = () => {
     if (paymentStatus === "success") {
       handleSuccess();
     } else if (paymentStatus === "cancel") {
-      toast.error("❌ Payment was canceled or failed.");
+      toast.error(t("stripeRedirect.paymentCanceled")); // ✅
     }
 
     setTimeout(() => {
@@ -94,7 +95,7 @@ const StripeRedirect = () => {
 
   return (
     <div style={{ textAlign: "center", padding: "2rem" }}>
-      <h2>جارٍ التأكيد...</h2>
+      <h2>{t("stripeRedirect.confirming")}</h2>
     </div>
   );
 };

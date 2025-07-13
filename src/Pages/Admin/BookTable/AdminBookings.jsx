@@ -115,6 +115,7 @@ const AdminBookings = () => {
     );
   } catch (err) {
     console.error("❌ خطأ في الرفض:", err);
+     toast.error(t("bookings.refundFailed")); // ✅ ترجمة الرسالة
   }
 };
 
@@ -235,13 +236,13 @@ const AdminBookings = () => {
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <p>Are you sure you want to delete this booking?</p>
+            <p>{t("bookings.confirmDelete")}</p>
             <div className="modal-actions">
               <button onClick={confirmDelete} className="yes-btn">
-                Yes
+                {t("buttons.yes")}
               </button>
               <button onClick={() => setShowModal(false)} className="no-btn">
-                No
+                {t("buttons.no")}
               </button>
             </div>
           </div>

@@ -92,10 +92,10 @@ useEffect(() => {
           setCategoriesList(data.categories || []);
           setPlanType(data.plan || "basic"); // ← أضفنا هاد السطر
         } else {
-          toast.error("Categories not found.");
+          toast.error(t("messagesA.categoriesNotFound"));
         }
       } catch (err) {
-        toast.error("Failed to fetch categories.");
+        toast.error(t("messagesA.fetchCategoriesFailed"));
       }
     };
 
@@ -105,7 +105,7 @@ useEffect(() => {
   const handleImageUpload = async (file) => {
     if (!file) return;
     setIsImageUploading(true);
-    toast.info("Uploading image... Please wait");
+    toast.info(t("messagesA.uploadingImage")); 
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "react_upload");
@@ -123,9 +123,9 @@ useEffect(() => {
       const version = data.version;
       const imageUrl = `https://res.cloudinary.com/dwupyymoc/image/upload/f_auto,q_auto,dpr_auto/v${version}/${publicId}.jpg`;
       setUploadedImageURL(imageUrl);
-      toast.success("Image uploaded successfully!");
+      toast.success(t("messagesA.imageUploadSuccess")); 
     } catch (err) {
-      toast.error("Image upload failed.");
+      toast.error(t("messagesA.imageUploadFailed"));  
     } finally {
       setIsImageUploading(false);
     }
@@ -133,7 +133,7 @@ useEffect(() => {
 
   const handleCategoryImageUpload = async (file) => {
     setIsImageUploading(true);
-    toast.info("Uploading category image...");
+    toast.info(t("messagesA.uploadingCategoryImage")); 
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "react_upload");
@@ -153,9 +153,9 @@ useEffect(() => {
       const imageUrl = `https://res.cloudinary.com/dwupyymoc/image/upload/f_auto,q_auto,w_400,dpr_auto/v${version}/${publicId}.jpg`;
 
       setCategoryImageURL(imageUrl);
-      toast.success("Category image uploaded!");
+      toast.success(t("messagesA.categoryImageUploaded"));
     } catch (err) {
-      toast.error("Image upload failed.");
+      toast.error(t("messagesA.imageUploadFailed"));
     } finally {
       setIsImageUploading(false);
     }
@@ -163,7 +163,7 @@ useEffect(() => {
 
   const handleAddCategory = async () => {
     if (!newCategoryName.trim() || !categoryImageURL) {
-      toast.error("Please enter category name and upload an image.");
+      toast.error(t("messagesA.categoryNameRequired"));  
       return;
     }
 
@@ -189,12 +189,12 @@ useEffect(() => {
         categories: updatedCategories,
       });
 
-      toast.success("Category added successfully!");
+     toast.success(t("messagesA.categoryAdded"));
       setCategoriesList(updatedCategories);
       setNewCategoryName("");
       setCategoryImageURL("");
     } catch (err) {
-      toast.error("Failed to add category.");
+      toast.error(t("messagesA.categoryAddFailed")); 
     }
   };
 
@@ -202,7 +202,7 @@ useEffect(() => {
     e.preventDefault();
 
     if (isImageUploading) {
-      toast.warn("Please wait until image finishes uploading.");
+      toast.warn(t("messagesA.waitImageUpload")); 
       return;
     }
 
@@ -228,7 +228,7 @@ useEffect(() => {
       selectedSizes.length === 0 ||
       (useUnifiedSize && !unifiedPrice)
     ) {
-      toast.error("Please fill in all fields and set the size price.");
+      toast.error(t("messagesA.fillAllFields")); 
       return;
     }
 
@@ -248,7 +248,7 @@ console.log("🟡 Product to Add:", newProduct);
 
       await addDoc(colRef, newProduct);
 
-      toast.success("Product added successfully!");
+      toast.success(t("messagesA.productAdded"));
 
       setName("");
       setDescription("");
@@ -266,7 +266,7 @@ console.log("🟡 Product to Add:", newProduct);
 
  console.error("🔥 Failed to add product:", err);
 
-      toast.error("Failed to add product.");
+      toast.error(t("messagesA.productAddFailed"));
     }
   };
 

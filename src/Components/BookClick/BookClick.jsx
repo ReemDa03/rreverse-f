@@ -47,7 +47,7 @@ const BookClick = ({ onClose, settings, reservationId, slug, onBookingSuccess, p
 
   const tempReservation = JSON.parse(localStorage.getItem("pendingReservation"));
   if (!tempReservation) {
-    toast.error("لا يوجد بيانات حجز محفوظة.");
+    toast.error(t("modal.noReservation"));
     return;
   }
 
@@ -77,7 +77,7 @@ const BookClick = ({ onClose, settings, reservationId, slug, onBookingSuccess, p
       localStorage.setItem("selectedPaymentMethod", "Stripe");
       window.location.href = data.url;
     } else {
-      toast.error("حدث خطأ أثناء تجهيز الدفع.");
+      toast.error(t("modal.stripeError"));
     }
 
     return;
@@ -93,7 +93,7 @@ const BookClick = ({ onClose, settings, reservationId, slug, onBookingSuccess, p
       status: "pending",
     });
 
-    toast.success("تم استلام طلب الحجز. يُرجى التواصل معنا للدفع وتأكيد الحجز.");
+    toast.success(t("modal.cashSuccess"));
 localStorage.removeItem("pendingReservation");
 
 
@@ -107,7 +107,7 @@ setTimeout(() => {
 
   } catch (err) {
     console.error("Error saving cash booking:", err);
-    toast.error("فشل في إنشاء الحجز.");
+    toast.error(t("modal.cashFail"));
   }
 };
   return (
@@ -125,7 +125,7 @@ setTimeout(() => {
             className={`method-btn ${paymentMethod === "Cash" ? "active" : ""}`}
             onClick={() => setPaymentMethod("Cash")}
           >
-            💵 Pay with Cash
+             {t("paymentMethods.cash")}
           </button>
           
            {planType === "premium" && (
@@ -133,7 +133,7 @@ setTimeout(() => {
       className={`method-btn ${paymentMethod === "Stripe" ? "active" : ""}`}
       onClick={() => setPaymentMethod("Stripe")}
     >
-      💳 Pay with Card
+       {t("paymentMethods.card")}
     </button>
   )}
         </div>
