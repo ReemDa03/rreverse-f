@@ -220,7 +220,7 @@ const OrdersPage = () => {
                   <hr />
                   {items.map((p, i) => (
                     <p key={i}>
-                      🍽 {p.name} | {p.size} | quantity : {p.quantity} | $
+                      🍽 {p.name} |Size : {p.size} | quantity : {p.quantity} | Price :
                       {p.price}
                       {p.notes && <> – 📝 Notes: {p.notes}</>}
                     </p>
