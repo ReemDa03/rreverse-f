@@ -170,38 +170,41 @@ const total = subtotal + (dineOption === "outside" ? deliveryFee : 0);
 
   // ✅ الدفع النقدي
   const handleCashPayment = async () => {
-    const orderData = {
-      items: Object.values(cartItems).map((item) => ({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        size: item.size,
-      })),
+  const orderId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-      dineOption: dineOption,
-
-      
-      ...(dineOption === "inside" ? { tableNumber } : { customerInfo }),
-      notes,
-      total,
-      paymentMethod: "cash",
-      paymentStatus: "pending",
-      createdAt: serverTimestamp(),
-      isSeen: false, // ✅ أضف هذا السطر لتمييز الطلب الجديد
-    };
-
-    try {
-      await addDoc(collection(db, "ReVerse", slug, "orders"), orderData);
-      clearCart();
-      setNotes("");
-      setShowCashModal(false);
-      toast.success(t("cart.successMessage"));
-    } catch (error) {
-      console.error("Error placing order:", error);
-      toast.error(t("cart.errorMessage"));
-    }
+  const orderData = {
+    slug,
+    orderId,
+    cartItems: Object.values(cartItems).map((item) => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      size: item.size,
+      notes: item.notes || "",
+    })),
+    dineOption,
+    customerInfo: dineOption === "outside" ? customerInfo : {},
+    tableNumber: dineOption === "inside" ? tableNumber : null,
+    notes,
+    name: customerInfo.name || `Guest-${orderId.slice(-4)}`,
+    phone: customerInfo.phone || "0000000000",
+    total,
   };
+
+  try {
+    await axios.post("/api/create-cash-order", orderData);
+
+    clearCart();
+    setNotes("");
+    setShowCashModal(false);
+    toast.success(t("cart.successMessage"));
+  } catch (error) {
+    console.error("Error placing cash order:", error);
+    toast.error(t("cart.errorMessage"));
+  }
+};
+
 
   if (loading) return <p>Loading...</p>;
 
