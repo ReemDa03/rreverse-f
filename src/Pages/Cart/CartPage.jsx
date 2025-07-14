@@ -71,6 +71,7 @@ const CartPage = () => {
     }
   }, [location.search]);
 
+
 const handleCardPayment = async () => {
   try {
     const currentDineOption = showCashModal.dineOption;
@@ -169,7 +170,9 @@ const handleCardPayment = async () => {
 const total = subtotal + (dineOption === "outside" ? deliveryFee : 0);
 
   // ✅ الدفع النقدي
-  const handleCashPayment = async () => {
+const handleCashPayment = async () => {
+  const currentDineOption = showCashModal.dineOption; // 🔥 المهم!
+
   const orderId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
   const orderData = {
@@ -183,9 +186,9 @@ const total = subtotal + (dineOption === "outside" ? deliveryFee : 0);
       size: item.size,
       notes: item.notes || "",
     })),
-    dineOption,
-    customerInfo: dineOption === "outside" ? customerInfo : {},
-    tableNumber: dineOption === "inside" ? tableNumber : null,
+    dineOption: currentDineOption, // ✅ هي الأساس
+    customerInfo: currentDineOption === "outside" ? customerInfo : {},
+    tableNumber: currentDineOption === "inside" ? tableNumber : null,
     notes,
     name: customerInfo.name || `Guest-${orderId.slice(-4)}`,
     phone: customerInfo.phone || "0000000000",
