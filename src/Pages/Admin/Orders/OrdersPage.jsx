@@ -203,11 +203,11 @@ const OrdersPage = () => {
                 }}
                 className="order-header"
               >
-                {index + 1}. items {items.length} – Date :{" "}
+                Order {index + 1} - items {items.length} – Date :{" "}
                 {order.createdAt?.seconds
                   ? new Date(order.createdAt.seconds * 1000).toLocaleString()
                   : "—"}{" "}
-                – {order.status || "*"}
+                – {order.status || "ْ"}
               </div>
 
               {openId === order.id && (
