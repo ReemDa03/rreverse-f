@@ -140,12 +140,12 @@ const OrdersPage = () => {
         {t("orders.back")}
       </button>
 
-      <h2 className="orders-title">Welcome to Admin Panel for: {slug}</h2>
-      <h3 className="orders-count">Orders: {filteredOrders.length}</h3>
+      <h2 className="orders-title"> {t("orders.title")} {slug}</h2>
+      <h3 className="orders-count">{t("orders.count")} {filteredOrders.length}</h3>
       <p className="orders-note">{t("orders.note")}</p>
 
       <div className="orders-filter">
-        <b>Filter by Status:</b>{" "}
+        <b>{t("orders.filterByStatus")}</b>{" "}
         {["all", "pending", "preparing", "ready", "delivered", "cancelled"].map(
           (status) => (
             <button
@@ -153,25 +153,22 @@ const OrdersPage = () => {
               onClick={() => setFilterStatus(status)}
               style={filterButtonStyle(filterStatus === status)}
             >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+              {t(`orders.statuses.${status}`)}
+
             </button>
           )
         )}
       </div>
 
       <div className="orders-type-filter">
-        <b>Order Type:</b>{" "}
+        <b>{t("orders.orderType")}</b>{" "}
         {["all", "inside", "outside"].map((type) => (
           <button
             key={type}
             onClick={() => setFilterType(type)}
             style={filterButtonStyle(filterType === type)}
           >
-            {type === "inside"
-              ? "Inside"
-              : type === "outside"
-              ? "Delivery"
-              : "All"}
+            {t(`orders.types.${type}`)}
           </button>
         ))}
       </div>
@@ -203,7 +200,7 @@ const OrdersPage = () => {
                 }}
                 className="order-header"
               >
-                Order {index + 1} - items {items.length} – Date :{" "}
+                {index + 1} - {t("orders.items")} {items.length} – {t("orders.date")} :{" "}
                 {order.createdAt?.seconds
                   ? new Date(order.createdAt.seconds * 1000).toLocaleString()
                   : "—"}{" "}
@@ -220,18 +217,18 @@ const OrdersPage = () => {
                   <hr />
                   {items.map((p, i) => (
                     <p key={i}>
-                      🍽 {p.name} |Size : {p.size} | quantity : {p.quantity} | Price : 
+                      🍽 {p.name} | {t("orders.size")} : {p.size} | {t("orders.quantity")} : {p.quantity} | {t("orders.price")} : 
                       {p.price}
-                      {p.notes && <> – 📝 Notes: {p.notes}</>}
+                      {p.notes && <> – 📝 {t("orders.notes")} : {p.notes}</>}
                     </p>
                   ))}
 
                   {order.notes && (
-                    <p className="order-notes"> Notes: {order.notes}</p>
+                    <p className="order-notes"> {t("orders.notes")}: {order.notes}</p>
                   )}
 
                   <p>
-                    <b> Total:</b> ${total.toFixed(2)}
+                    <b> {t("orders.total")}:</b> ${total.toFixed(2)}
                   </p>
 
                   {order.dineOption === "outside" && (
@@ -264,8 +261,8 @@ const OrdersPage = () => {
                     💳 {t("orders.payment")}:{" "}
                     {order.paymentMethod === "online" &&
                       (order.paymentStatus === "paid"
-                        ? "💳 Paid by Card"
-                        : "❗ Payment Failed")}
+                        ? t("orders.paidOnline")
+                        : t("orders.unpaidOnline"))}
                     {order.paymentMethod === "cash" && "💵 Cash on Delivery"}
                     {!order.paymentMethod && "—"}
                   </p>
@@ -280,7 +277,7 @@ const OrdersPage = () => {
                           onClick={() => updateStatus(order.id, status)}
                           className="status-btn"
                         >
-                          {status.charAt(0).toUpperCase() + status.slice(1)}
+                          {t(`orders.statuses.${status}`)}
                         </button>
                       )
                     )}

@@ -235,31 +235,50 @@
     "dash": "-"
   },
 
-
 "orders": {
   "back": "Back",
-  "title": "Welcome to Admin Panel for: {{slug}}",
-  "count": "Orders: {{count}}",
+  "title": "Welcome to Admin Panel for:",
+  "count": "Orders:",
+  "items": "Items",
+  "date": "Date",
+  "status": "Status",
+  "size": "Size",
+  "quantity": "Quantity",
+  "price": "Price",
   "note": "Note that the orders older than the most recent 80 will be automatically deleted to maintain performance.",
-  "filterByStatus": "Filter by Status:",
-  "orderType": "Order Type:",
-  "header": "{{index}}. Items {{count}} – Date: {{date}} – {{status}}",
-  "item": "🍽 {{name}} | {{size}} | quantity: {{quantity}} | ${{price}}",
-  "notes": "Notes",
-  "total": "Total",
   "name": "Name",
   "address": "Address",
   "phone": "Phone",
   "tableNumber": "Table Number",
-  
   "payment": "Payment",
   "paidOnline": "✅ Paid Online",
   "unpaidOnline": "❗ Unpaid - Online Selected",
   "cashOnDelivery": "💵 Cash on Delivery",
   "changeStatus": "Order Status:",
   "cancelled": "This order is cancelled",
-  "delete": "Delete"
-},
+  "delete": "Delete",
+  "filterByStatus": "Filter by Status:",
+  "notes": "Notes",
+  "orderType": "Order Type:",
+  "orderNum": "Order",
+  "statuses": {
+    "all": "All",
+    "pending": "Pending",
+    "preparing": "Preparing",
+    "ready": "Ready",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled"
+  },
+  "types": {
+    "all": "All",
+    "inside": "Dine-In",
+    "outside": "Delivery"
+  },
+  "total": "Total"
+}
+,
+
+
 "admin": {
   "title": "Admin Panel - {{slug}}",
   "name": "Name",
