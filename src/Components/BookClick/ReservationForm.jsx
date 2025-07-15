@@ -13,7 +13,7 @@ import BookClick from "./BookClick";
 // حذفنا framer-motion
 import { useTranslation } from "react-i18next"; // ✅
 
-function ReservationForm({ slug }) {
+function ReservationForm({ slug, planType  }) {
   const [settings, setSettings] = useState(null);
   const [tableSize, setTableSize] = useState("2");
   const [date, setDate] = useState("");
@@ -23,6 +23,9 @@ function ReservationForm({ slug }) {
   const [reservationId, setReservationId] = useState(null);
   const sectionRef = useRef(null);
   const { t } = useTranslation(); // ✅
+
+  if (!["premium", "pro"].includes(planType)) return null;
+
 
   useEffect(() => {
     const fetchSettings = async () => {
