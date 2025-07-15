@@ -221,7 +221,7 @@ const handleCashPayment = async () => {
       className="cart-page"
     >
       <ToastContainer position="top-center" autoClose={3000} />
-      <h2 className="cart-title">Your Cart</h2>
+      <h2 className="cart-title">{t("cart.cartTitle")}</h2>
 
       {Object.keys(cartItems).length === 0 ? (
         <div className="cart-empty">

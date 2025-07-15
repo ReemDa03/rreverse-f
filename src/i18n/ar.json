@@ -184,6 +184,7 @@
   "cancel": "إلغاء"
 },
 "cart": {
+  "cartTitle": "السلة",
   "totalTitle": "إجمالي السلة",
   "subtotal": "المجموع الفرعي",
   "deliveryFee": "رسوم التوصيل",

@@ -294,6 +294,7 @@
   "cancel": "Cancel"
 },
 "cart": {
+  "cartTitle": "Your Cart",
   "totalTitle": "Cart Total",
   "subtotal": "Subtotal",
   "deliveryFee": "Delivery Fee",

@@ -16,7 +16,7 @@ const CartDetails = ({
     <div className="cart-details">
       <h3 className="summary-title">{t("cart.totalTitle")}</h3>
       <p className="summary-line">
-        {t("cart.subtotal")}: ${subtotal.toFixed(2)}
+        {t("cart.subtotal")}: {pricesign}{subtotal.toFixed(2)}
       </p>
       {dineOption === "outside" && (
         <p className="summary-line">
