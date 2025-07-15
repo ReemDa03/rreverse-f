@@ -8,6 +8,7 @@ const CartDetails = ({
   deliveryFee,
   total,
   setDineOption,
+  pricesign // ✅
 }) => {
   const { t } = useTranslation();
 
@@ -19,11 +20,11 @@ const CartDetails = ({
       </p>
       {dineOption === "outside" && (
         <p className="summary-line">
-          {t("cart.deliveryFee")}: ${deliveryFee.toFixed(2)}
+          {t("cart.deliveryFee")}: {pricesign}{deliveryFee.toFixed(2)}
         </p>
       )}
       <p className="summary-total">
-        {t("cart.total")}: ${total.toFixed(2)}
+        {t("cart.total")}: {pricesign}{total.toFixed(2)}
       </p>
 
       {!dineOption && (

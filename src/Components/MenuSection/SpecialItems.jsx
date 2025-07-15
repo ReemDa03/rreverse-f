@@ -12,7 +12,9 @@ function SpecialItems({
   handleAddToCart,
   removeFromCart,
   renderDescription,
-  specialTitle
+  
+  specialTitle,
+  pricesign // ✅ أضفنا العملة كمُعطى
 }) {
   if (!items?.length) return null;
 
@@ -77,11 +79,11 @@ function SpecialItems({
 
               <div>
                 {item.oldPrice && (
-                  <span className="menu-item__old-price">${item.oldPrice}</span>
+                  <span className="menu-item__old-price">{pricesign}{item.oldPrice}</span>
                 )}
                 <span className="menu-item__price">
                   {selectedSize
-                    ? `$${availableSizes[selectedSize]?.price.toFixed(2)}`
+                    ? `${availableSizes[selectedSize]?.price.toFixed(2)} ${pricesign}`
                     : `$${item.price}`}
                 </span>
               </div>

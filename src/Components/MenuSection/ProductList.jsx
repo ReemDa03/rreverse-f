@@ -14,6 +14,7 @@ function ProductList({
   handleAddToCart,
   removeFromCart,
   renderDescription,
+  pricesign, // ✅ أضفناها
 }) {
   const { t } = useTranslation();
   const [showAll, setShowAll] = useState(false);
@@ -93,7 +94,8 @@ function ProductList({
                 <div className="price-and-sizes">
                   <p className="food-item-price">
                     {selectedSize
-                      ? `$${availableSizes[selectedSize]?.price.toFixed(2)}`
+                      ? `${availableSizes[selectedSize]?.price.toFixed(2)} ${pricesign}`
+
                       : t("productList.priceLabel")}
                   </p>
 

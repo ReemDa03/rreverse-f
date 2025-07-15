@@ -57,7 +57,7 @@ useEffect(() => {
     try {
       onAuthStateChanged(auth, async (user) => {
         if (user) {
-          console.log("✅ Logged in as:", user.uid);
+          //console.log("✅ Logged in as:", user.uid);
           const docRef = doc(db, "ReVerse", slug);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
@@ -243,7 +243,7 @@ useEffect(() => {
 
       const colRef = collection(db, "ReVerse", slug, "products");
 
-console.log("🟡 Product to Add:", newProduct);
+//console.log("🟡 Product to Add:", newProduct);
 
 
       await addDoc(colRef, newProduct);

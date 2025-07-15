@@ -49,6 +49,8 @@ const CartPage = () => {
   const location = useLocation();
 
   const planType = restaurantData?.plan || "basic";
+  const pricesign = restaurantData?.pricesign || "$";
+
 
   useEffect(() => {
   if (dineOption === "inside" || dineOption === "outside") {
@@ -237,6 +239,7 @@ const handleCashPayment = async () => {
                 product={product}
                 addToCart={addToCart}
                 removeFromCart={removeFromCart}
+                pricesign={pricesign} // ✅
               />
             );
           })}
@@ -257,6 +260,7 @@ const handleCashPayment = async () => {
                 total={total}
                 dineOption={dineOption}
                 setDineOption={setDineOption}
+                pricesign={pricesign} // ✅
               />
             </div>
 

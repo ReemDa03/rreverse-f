@@ -140,6 +140,7 @@ function MenuSection() {
           removeFromCart={removeFromCart}
           renderDescription={renderDescription}
           specialTitle={data.specialTitle}
+           pricesign={data.pricesign || "$"} // ✅ مرري العملة
         />
       )}
 
@@ -162,6 +163,7 @@ function MenuSection() {
         handleAddToCart={handleAddToCart}
         removeFromCart={removeFromCart}
         renderDescription={renderDescription}
+        pricesign={data.pricesign || "$"} // ✅ مرري العملة
       />
 
       <MenuModal

@@ -4,7 +4,8 @@ import "./Cart.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-const CartItem = ({ item, product }) => {
+const CartItem = ({ item, product, pricesign 
+ }) => {
   const { addToCart, removeFromCart } = useContext(StoreContext);
   const { t } = useTranslation();
 
@@ -46,7 +47,7 @@ const CartItem = ({ item, product }) => {
         </p>
 
         <p className="cart-item-price">
-          {t("cart.price")}: ${item.price.toFixed(2)}
+          {t("cart.price")}: {pricesign}{item.price.toFixed(2)}
         </p>
         <p className="cart-item-size">
           {t("cart.size")}: {item.size}
@@ -84,7 +85,7 @@ const CartItem = ({ item, product }) => {
         </div>
 
         <span className="cart-item-total">
-          {t("cart.total")}: ${(item.price * item.quantity).toFixed(2)}
+          {t("cart.total")}: {pricesign}{(item.price * item.quantity).toFixed(2)}
         </span>
       </div>
 
