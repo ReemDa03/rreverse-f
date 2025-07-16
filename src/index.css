@@ -16,6 +16,16 @@ html, body {
   scroll-behavior: smooth;
 }
 
+/* اللغة الإنجليزية */
+.lang-en {
+  font-family: "Outfit", sans-serif;
+}
+
+/* اللغة العربية */
+.lang-ar {
+  font-family: "Tajawal", sans-serif;
+}
+
 
 .navbar, .footer {
   z-index: 10 !important;

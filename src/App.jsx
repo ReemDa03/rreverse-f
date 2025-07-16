@@ -37,6 +37,10 @@ const App = () => {
   useEffect(() => {
     document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = i18n.language;
+
+    // ✅ إضافة كلاس للغة على body لتغيير الخط حسب اللغة
+  document.body.classList.remove("lang-ar", "lang-en");
+  document.body.classList.add(i18n.language === "ar" ? "lang-ar" : "lang-en");
   }, [i18n.language]);
 
   return (
