@@ -6,12 +6,12 @@ const clients = [
   {
     name: "ReVerse Cafe",
     image: "https://res.cloudinary.com/dwupyymoc/image/upload/f_auto,q_auto,w_400,h_300,c_fill/v1751506509/Mehbud_Suspended_Ceilings_for_Your_Prestige_s7wqri.jpg",
-    link: "https://rreverse.netlify.app/reverse/re-caffee"
+    link: "https://rreverse-f.vercel.app/reverse/re-caffee"
   },
   {
     name: "ReVerse Rest",
     image: "https://res.cloudinary.com/dwupyymoc/image/upload/f_auto,q_auto,w_400,h_300,c_fill/v1751506509/Pub_Sustainable_Architecture_Design_Ideas_pvbwmn.jpg",
-    link: "https://rreverse.netlify.app/reverse/re-rest"
+    link: "https://rreverse-f.vercel.app/reverse/re-rest"
   },
   {
     name: "Fake Sushi Corner",
