@@ -43,6 +43,32 @@ const Home = () => {
   }, [location]);
 
   if (!planType) return null; // أو ممكن سبينر مؤقت
+ 
+  if (planType === "off") {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        textAlign: "center",
+        backgroundColor: "#f9f9f9",
+        color: "#333",
+        padding: "20px"
+      }}
+    >
+      <div>
+        <h1 style={{ fontSize: "2rem", marginBottom: "10px" }}>
+          الموقع غير متاح حالياً
+        </h1>
+        <p style={{ fontSize: "1rem", color: "#666" }}>
+          يرجى المحاولة لاحقاً أو التواصل مع المطعم لمعرفة التفاصيل.
+        </p>
+      </div>
+    </div>
+  );
+}
 
   return (
     <div>
